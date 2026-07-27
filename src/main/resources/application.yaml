@@ -1,30 +1,41 @@
+server:
+  port: 8080
+
 spring:
   application:
-    name: ECommrece
-  server:
-    port: 8080
+    name: ecommerce-api
 
-  spring:
-    application:
-      name: ecommerce-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce_db?sslmode=disable
+    username: mrbg
+    password: '1234'
+    driver-class-name: org.postgresql.Driver
 
-    datasource:
-      url: jdbc:postgresql://localhost:5432/ecommerce_db
-      username: postgres
-      password: postgrespassword
-      driver-class-name: org.postgresql.Driver
-
-    jpa:
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
       hibernate:
-        ddl-auto: update # Automatically creates/updates tables based on Java Entities
-      show-sql: true
-      properties:
-        hibernate:
-          format_sql: true
+        format_sql: true
 
-  # Helpful logger to inspect SQL queries in development
-  logging:
-    level:
-      org.hibernate.SQL: DEBUG
-      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+logging:
+  level:
+    org.hibernate.SQL: ERROR
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+application:
+  security:
+    jwt:
+      # Base64 encoded 256-bit secret key
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      # Token validity: 24 hours (in milliseconds)
+      expiration: 86400000
