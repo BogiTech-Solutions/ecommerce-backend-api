@@ -1,3 +1,30 @@
 spring:
   application:
     name: ECommrece
+  server:
+    port: 8080
+
+  spring:
+    application:
+      name: ecommerce-api
+
+    datasource:
+      url: jdbc:postgresql://localhost:5432/ecommerce_db
+      username: postgres
+      password: postgrespassword
+      driver-class-name: org.postgresql.Driver
+
+    jpa:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        ddl-auto: update # Automatically creates/updates tables based on Java Entities
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+
+  # Helpful logger to inspect SQL queries in development
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
