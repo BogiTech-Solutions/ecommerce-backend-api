@@ -9,6 +9,11 @@ import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.ecommerce.dto.PageResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +24,29 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+
+    @Override
+    public PageResponse<ProductResponse> getPaginatedProducts(int page, int size, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Product> productPage = productRepository.findAll(pageable);
+
+        List<ProductResponse> content = productPage.getContent().stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+
+        return PageResponse.<ProductResponse>builder()
+                .content(content)
+                .pageNumber(productPage.getNumber())
+                .pageSize(productPage.getSize())
+                .totalElements(productPage.getTotalElements())
+                .totalPages(productPage.getTotalPages())
+                .last(productPage.isLast())
+                .build();
+    }
 
     @Override
     public ProductResponse createProduct(ProductRequest request) {

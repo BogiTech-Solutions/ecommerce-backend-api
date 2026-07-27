@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.ecommerce.dto.PageResponse;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -27,6 +29,16 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+
+    @GetMapping("/page")
+    @Operation(summary = "Get paginated products", description = "Public endpoint to fetch products with pagination and sorting")
+    public ResponseEntity<PageResponse<ProductResponse>> getPaginatedProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+        return ResponseEntity.ok(productService.getPaginatedProducts(page, size, sortBy, sortDir));
+    }
 
     @GetMapping
     @Operation(summary = "Get all products", description = "Public endpoint to list all available products")

@@ -50,7 +50,8 @@ public class CategoryController {
     @PutMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Update an existing category", description = "Admin only")
-    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id, @RequestBody CategoryRequest request) {
+    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id,
+            @RequestBody CategoryRequest request) {
         return ResponseEntity.ok(categoryService.updateCategory(id, request));
     }
 
