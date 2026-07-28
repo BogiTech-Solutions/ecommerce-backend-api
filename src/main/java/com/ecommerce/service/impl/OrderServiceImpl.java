@@ -9,6 +9,8 @@ import com.ecommerce.entity.OrderItem;
 import com.ecommerce.entity.OrderStatus;
 import com.ecommerce.entity.Product;
 import com.ecommerce.entity.User;
+import com.ecommerce.exception.BadRequestException;
+import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.repository.OrderRepository;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.UserRepository;
@@ -34,10 +36,10 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderResponse createOrder(String userEmail, OrderRequest request) {
         User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + userEmail));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + userEmail));
 
         if (request.getItems() == null || request.getItems().isEmpty()) {
-            throw new RuntimeException("Cannot place an order with no items.");
+            throw new BadRequestException("Cannot place an order with no items.");
         }
 
         Order order = Order.builder()
@@ -51,10 +53,10 @@ public class OrderServiceImpl implements OrderService {
 
         for (OrderItemRequest itemReq : request.getItems()) {
             Product product = productRepository.findById(itemReq.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found with id: " + itemReq.getProductId()));
+                    .orElseThrow(() ->new ResourceNotFoundException("Product not found with id: " + itemReq.getProductId()));
 
             if (product.getStockQuantity() < itemReq.getQuantity()) {
-                throw new RuntimeException("Insufficient stock for product: " + product.getName());
+                throw new BadRequestException("Insufficient stock for product: " + product.getName());
             }
 
             // Deduct stock
@@ -83,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderResponse> getUserOrders(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + userEmail));
         return orderRepository.findByUserId(user.getId()).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
@@ -92,10 +94,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse getOrderById(Long orderId, String userEmail) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
 
         if (!order.getUser().getEmail().equals(userEmail)) {
-            throw new RuntimeException("Unauthorized to view this order.");
+            throw new ResourceNotFoundException("Unauthorized to view this order.");
         }
 
         return mapToResponse(order);
@@ -105,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderResponse updateOrderStatus(Long orderId, OrderStatus status) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
 
         order.setStatus(status);
         Order updatedOrder = orderRepository.save(order);
