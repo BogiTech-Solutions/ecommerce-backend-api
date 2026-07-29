@@ -6,15 +6,15 @@ spring:
     name: ecommerce-api
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/ecommerce_db?sslmode=disable
-    username: mrbg
-    password: '1234'
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/ecommerce_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
     show-sql: true
     properties:
       hibernate:
@@ -35,14 +35,13 @@ management:
 application:
   security:
     jwt:
-      # Base64 encoded 256-bit secret key
-      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-      # Token validity: 24 hours (in milliseconds)
-      expiration: 86400000
+      secret: ${JWT_SECRET:default_jwt_secret_key_change_me_in_prod_1234567890}
+      expiration: ${JWT_EXPIRATION_MS:86400000} # 24 hours
 payment:
   stripe:
-    secret-key: sk_test_51...
-    webhook-secret: whsec_...
+    secret-key: ${STRIPE_SECRET_KEY:sk_test_placeholder}
+    webhook-secret: ${STRIPE_WEBHOOK_SECRET:whsec_test_placeholder}
   chapa:
-    secret-key: CHASECK_TEST-...
+    secret-key: ${CHAPA_SECRET_KEY:CHASECK_TEST_placeholder}
+    webhook-secret: ${CHAPA_WEBHOOK_SECRET:chapa_webhook_secret_placeholder}
     base-url: https://api.chapa.co/v1

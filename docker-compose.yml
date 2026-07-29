@@ -1,18 +1,52 @@
+
 version: '3.8'
 
 services:
-  postgres:
+  # --- PostgreSQL Database ---
+  postgres-db:
     image: postgres:16-alpine
     container_name: ecommerce-postgres
     restart: always
     environment:
-      POSTGRES_DB: ecommerce_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # --- Spring Boot API ---
+  api-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecommerce-api
+    restart: always
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JWT_SECRET: your_super_secret_jwt_key_that_is_at_least_256_bits_long
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_placeholder}
+      CHAPA_SECRET_KEY: ${CHAPA_SECRET_KEY:-CHASECK_TEST_placeholder}
+      CHAPA_WEBHOOK_SECRET: ${CHAPA_WEBHOOK_SECRET:-chapa_webhook_secret_placeholder}
+    volumes:
+      - uploads_data:/app/uploads # Persist uploaded product assets locally
 
 volumes:
   postgres_data:
+    driver: local
+  uploads_data:
+    driver: local
