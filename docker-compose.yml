@@ -1,6 +1,3 @@
-
-version: '3.8'
-
 services:
   # --- PostgreSQL Database ---
   postgres-db:
@@ -34,15 +31,17 @@ services:
     ports:
       - "8080:8080"
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      JWT_SECRET: ${JWT_SECRET:-default_jwt_secret_key_change_me_in_prod_1234567890}
-      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000} # 24 hours
-      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_placeholder}
-      CHAPA_SECRET_KEY: ${CHAPA_SECRET_KEY:-CHASECK_TEST_placeholder}
-      CHAPA_WEBHOOK_SECRET: ${CHAPA_WEBHOOK_SECRET:-chapa_webhook_secret_placeholder}
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - JWT_SECRET=${T_SECRET:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      - JWT_EXPIRATION_MS=${T_EXPIRATION_MS:-86400000} # 24 hours
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-sk_test_placeholder}
+      - CHAPA_SECRET_KEY=${CHAPA_SECRET_KEY:-CHASECK_TEST_placeholder}
+      - CHAPA_WEBHOOK_SECRET=${CHAPA_WEBHOOK_SECRET:-chapa_webhook_secret_placeholder}
+
     volumes:
       - uploads_data:/app/uploads # Persist uploaded product assets locally
 

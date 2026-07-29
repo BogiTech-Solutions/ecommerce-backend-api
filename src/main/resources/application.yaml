@@ -4,12 +4,18 @@ server:
 spring:
   application:
     name: ecommerce-api
-
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/ecommerce_db}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    url: jdbc:postgresql://ep-noisy-salad-axa2vu4d.c-4.us-east-2.aws.neon.tech:5432/neondb?sslmode=require&channel_binding=require
+    username: neondb_owner
+    password: npg_q0YWwGkfxMl9
     driver-class-name: org.postgresql.Driver
+
+  # datasource:
+  #   url: jdbc:postgresql://neondb_owner:npg_q0YWwGkfxMl9@ep-noisy-salad-axa2vu4d.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+  #   username: neondb_owner
+  #   password: npg_q0YWwGkfxMl9
+  #   driver-class-name: org.postgresql.Driver
+
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -35,8 +41,8 @@ management:
 application:
   security:
     jwt:
-      secret: ${JWT_SECRET:default_jwt_secret_key_change_me_in_prod_1234567890}
-      expiration: ${JWT_EXPIRATION_MS:86400000} # 24 hours
+      secret: ${T_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      expiration: ${T_EXPIRATION_MS:86400000}
 payment:
   stripe:
     secret-key: ${STRIPE_SECRET_KEY:sk_test_placeholder}
