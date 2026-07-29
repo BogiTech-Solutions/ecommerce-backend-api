@@ -5,7 +5,7 @@ spring:
   application:
     name: ecommerce-api
   datasource:
-    url: jdbc:postgresql://ep-noisy-salad-axa2vu4d.c-4.us-east-2.aws.neon.tech:5432/neondb?sslmode=require&channel_binding=require
+    url: ${SPRING_DATASOURCE_URL}
     username: neondb_owner
     password: npg_q0YWwGkfxMl9
     driver-class-name: org.postgresql.Driver
@@ -41,8 +41,8 @@ management:
 application:
   security:
     jwt:
-      secret: ${T_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-      expiration: ${T_EXPIRATION_MS:86400000}
+      secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      expiration: ${JWT_EXPIRATION_MS:86400000}
 payment:
   stripe:
     secret-key: ${STRIPE_SECRET_KEY:sk_test_placeholder}
