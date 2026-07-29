@@ -38,7 +38,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      JWT_SECRET: your_super_secret_jwt_key_that_is_at_least_256_bits_long
+      JWT_SECRET: ${JWT_SECRET:-default_jwt_secret_key_change_me_in_prod_1234567890}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000} # 24 hours
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_placeholder}
       CHAPA_SECRET_KEY: ${CHAPA_SECRET_KEY:-CHASECK_TEST_placeholder}
       CHAPA_WEBHOOK_SECRET: ${CHAPA_WEBHOOK_SECRET:-chapa_webhook_secret_placeholder}
