@@ -51,3 +51,5 @@ payment:
     secret-key: ${CHAPA_SECRET_KEY:CHASECK_TEST_placeholder}
     webhook-secret: ${CHAPA_WEBHOOK_SECRET:chapa_webhook_secret_placeholder}
     base-url: https://api.chapa.co/v1
+file:
+  upload-dir: ${FILE_UPLOAD_DIR:/app/uploads}

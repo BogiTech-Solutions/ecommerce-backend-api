@@ -41,6 +41,7 @@ services:
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-sk_test_placeholder}
       - CHAPA_SECRET_KEY=${CHAPA_SECRET_KEY:-CHASECK_TEST_placeholder}
       - CHAPA_WEBHOOK_SECRET=${CHAPA_WEBHOOK_SECRET:-chapa_webhook_secret_placeholder}
+      - FILE_UPLOAD_DIR=${FILE_UPLOAD_DIR:/app/uploads}
 
     volumes:
       - uploads_data:/app/uploads # Persist uploaded product assets locally

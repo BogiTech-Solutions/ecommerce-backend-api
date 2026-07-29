@@ -14,8 +14,11 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Create a non-root group and user for security
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# Create user and required upload directory with correct permissions
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup \
+    && mkdir -p /app/uploads \
+    && chown -R appuser:appgroup /app
+
 USER appuser
 
 # Copy built JAR from stage 1
