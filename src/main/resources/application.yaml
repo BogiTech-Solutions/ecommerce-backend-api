@@ -6,16 +6,9 @@ spring:
     name: ecommerce-api
   datasource:
     url: ${SPRING_DATASOURCE_URL}
-    username: neondb_owner
-    password: npg_q0YWwGkfxMl9
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
-
-  # datasource:
-  #   url: jdbc:postgresql://neondb_owner:npg_q0YWwGkfxMl9@ep-noisy-salad-axa2vu4d.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
-  #   username: neondb_owner
-  #   password: npg_q0YWwGkfxMl9
-  #   driver-class-name: org.postgresql.Driver
-
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
