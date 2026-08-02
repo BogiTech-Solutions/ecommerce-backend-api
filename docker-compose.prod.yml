@@ -1,0 +1,26 @@
+services:
+  api-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecommerce-api-prod
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION_MS=${JWT_EXPIRATION_MS}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - CHAPA_SECRET_KEY=${CHAPA_SECRET_KEY}
+      - CHAPA_WEBHOOK_SECRET=${CHAPA_WEBHOOK_SECRET}
+      - FILE_UPLOAD_DIR=/app/uploads
+    volumes:
+      - uploads_prod_data:/app/uploads
+
+volumes:
+  uploads_prod_data:

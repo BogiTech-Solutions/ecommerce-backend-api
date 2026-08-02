@@ -1,9 +1,8 @@
 services:
-  # --- PostgreSQL Database ---
   postgres-db:
     image: postgres:16-alpine
-    container_name: ecommerce-postgres
-    restart: always
+    container_name: ecommerce-postgres-dev
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -11,43 +10,38 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_dev_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
 
-  # --- Spring Boot API ---
   api-backend:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ecommerce-api
-    restart: always
+    container_name: ecommerce-api-dev
+    restart: unless-stopped
     depends_on:
       postgres-db:
         condition: service_healthy
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - POSTGRES_DB=${POSTGRES_DB}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - JWT_SECRET=${JWT_SECRET:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-      - JWT_EXPIRATION_MS=${JWT_EXPIRATION_MS:-86400000} # 24 hours
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-sk_test_placeholder}
-      - CHAPA_SECRET_KEY=${CHAPA_SECRET_KEY:-CHASECK_TEST_placeholder}
-      - CHAPA_WEBHOOK_SECRET=${CHAPA_WEBHOOK_SECRET:-chapa_webhook_secret_placeholder}
-      - FILE_UPLOAD_DIR=${FILE_UPLOAD_DIR:/app/uploads}
-
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION_MS=${JWT_EXPIRATION_MS}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - CHAPA_SECRET_KEY=${CHAPA_SECRET_KEY}
+      - CHAPA_WEBHOOK_SECRET=${CHAPA_WEBHOOK_SECRET}
     volumes:
-      - uploads_data:/app/uploads # Persist uploaded product assets locally
+      - uploads_dev_data:/app/uploads
 
 volumes:
-  postgres_data:
-    driver: local
-  uploads_data:
-    driver: local
+  postgres_dev_data:
+  uploads_dev_data:

@@ -4,39 +4,37 @@ server:
 spring:
   application:
     name: ecommerce-api
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      idle-timeout: 300000
+      connection-timeout: 20000
   jpa:
     open-in-view: false
-  datasource:
-    url: jdbc:postgresql://localhost:5432/ecommerce_db?sslmode=disable
-    username: mrbg
-    password: 1234
-    driver-class-name: org.postgresql.Driver
+    hibernate:
+      ddl-auto: update
 
-logging:
-  level:
-    org.hibernate.SQL: ERROR
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health
-  endpoint:
-    health:
-      show-details: always
 application:
   security:
     jwt:
-      secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      secret: ${JWT_SECRET}
       expiration: ${JWT_EXPIRATION_MS:86400000}
+
 payment:
   stripe:
-    secret-key: ${STRIPE_SECRET_KEY:sk_test_placeholder}
-    webhook-secret: ${STRIPE_WEBHOOK_SECRET:whsec_test_placeholder}
+    secret-key: ${STRIPE_SECRET_KEY}
+    webhook-secret: ${STRIPE_WEBHOOK_SECRET}
   chapa:
-    secret-key: ${CHAPA_SECRET_KEY:CHASECK_TEST_placeholder}
-    webhook-secret: ${CHAPA_WEBHOOK_SECRET:chapa_webhook_secret_placeholder}
+    secret-key: ${CHAPA_SECRET_KEY}
+    webhook-secret: ${CHAPA_WEBHOOK_SECRET}
     base-url: https://api.chapa.co/v1
-file:
-  upload-dir: ./uploads
 
+file:
+  upload-dir: /app/uploads

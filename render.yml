@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: ecommerce-api
+    env: docker
+    dockerfilePath: ./Dockerfile
+    region: ohio
+    plan: starter
+    healthCheckPath: /actuator/health
+    envVars:
+      # Safe to commit (Non-sensitive configuration)
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: JWT_EXPIRATION_MS
+        value: "86400000"
+
+      # SECURE: 'sync: false' means Render will ask you for the secret value in the dashboard UI
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: CHAPA_SECRET_KEY
+        sync: false
+      - key: CHAPA_WEBHOOK_SECRET
+        sync: false

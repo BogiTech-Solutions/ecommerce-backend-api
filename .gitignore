@@ -20,7 +20,12 @@ uploads/
 *.iws
 *.iml
 *.ipr
+
+# Environment Files
 .env
+.env.local
+.env.production
+.env.*.local
 
 ### NetBeans ###
 /nbproject/private/
