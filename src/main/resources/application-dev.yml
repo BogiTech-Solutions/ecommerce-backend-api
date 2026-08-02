@@ -1,10 +1,11 @@
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/ecommerce_db?sslmode=disable}
+    url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME:mrbg}
     password: ${SPRING_DATASOURCE_PASSWORD:1234}
     driver-class-name: org.postgresql.Driver
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -14,6 +15,6 @@ spring:
 
 logging:
   level:
-    root: INFO
-    com.ecommerce: DEBUG
-    org.hibernate.SQL: DEBUG
+    root: ERROR
+    com.ecommerce: ERROR
+    org.hibernate.SQL: ERROR

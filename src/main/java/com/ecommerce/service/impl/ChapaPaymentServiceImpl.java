@@ -16,7 +16,7 @@ import java.util.UUID;
 @Service("chapaPaymentService")
 public class ChapaPaymentServiceImpl implements PaymentService {
 
-    @Value("${payment.chapa.secret-key}")
+    @Value("${payment.chapa.secret-key:}")
     private String chapaSecretKey;
 
     @Value("${payment.chapa.base-url}")

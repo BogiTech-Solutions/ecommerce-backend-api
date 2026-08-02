@@ -10,11 +10,11 @@ spring:
       idle-timeout: 300000
       connection-timeout: 20000
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: validate # Use Flyway or Liquibase in production
-    show-sql: false
+      ddl-auto: update
 
 logging:
   level:
-    root: WARN
-    com.ecommerce: INFO
+    root: ERROR
+    com.ecommerce: ERROR

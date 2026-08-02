@@ -24,7 +24,7 @@ public class FileUploadController {
 
     private final FileUploadService fileUploadService;
 
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "./upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Upload an image/file", description = "Returns the accessible URL for the uploaded file")
     public ResponseEntity<Map<String, String>> uploadFile(@RequestParam("file") MultipartFile file) {

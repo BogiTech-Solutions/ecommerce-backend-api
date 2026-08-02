@@ -7,9 +7,9 @@ spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 5
@@ -17,7 +17,7 @@ spring:
       idle-timeout: 300000
       connection-timeout: 20000
   jpa:
-    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
 
@@ -35,6 +35,9 @@ payment:
     secret-key: ${CHAPA_SECRET_KEY}
     webhook-secret: ${CHAPA_WEBHOOK_SECRET}
     base-url: https://api.chapa.co/v1
-
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: ${JWT_EXPIRATION_MS:86400000}
 file:
-  upload-dir: /app/uploads
+  upload-dir: ./uploads
