@@ -15,14 +15,13 @@ import com.ecommerce.repository.OrderRepository;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.OrderService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,43 +34,58 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse createOrder(String userEmail, OrderRequest request) {
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + userEmail));
+        User user =
+                userRepository
+                        .findByEmail(userEmail)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "User not found with email: " + userEmail));
 
         if (request.getItems() == null || request.getItems().isEmpty()) {
             throw new BadRequestException("Cannot place an order with no items.");
         }
 
-        Order order = Order.builder()
-                .user(user)
-                .status(OrderStatus.PENDING)
-                .items(new ArrayList<>())
-                .totalAmount(BigDecimal.ZERO)
-                .build();
+        Order order =
+                Order.builder()
+                        .user(user)
+                        .status(OrderStatus.PENDING)
+                        .items(new ArrayList<>())
+                        .totalAmount(BigDecimal.ZERO)
+                        .build();
 
         BigDecimal totalAmount = BigDecimal.ZERO;
 
         for (OrderItemRequest itemReq : request.getItems()) {
-            Product product = productRepository.findById(itemReq.getProductId())
-                    .orElseThrow(() ->new ResourceNotFoundException("Product not found with id: " + itemReq.getProductId()));
+            Product product =
+                    productRepository
+                            .findById(itemReq.getProductId())
+                            .orElseThrow(
+                                    () ->
+                                            new ResourceNotFoundException(
+                                                    "Product not found with id: "
+                                                            + itemReq.getProductId()));
 
             if (product.getStockQuantity() < itemReq.getQuantity()) {
-                throw new BadRequestException("Insufficient stock for product: " + product.getName());
+                throw new BadRequestException(
+                        "Insufficient stock for product: " + product.getName());
             }
 
             // Deduct stock
             product.setStockQuantity(product.getStockQuantity() - itemReq.getQuantity());
             productRepository.save(product);
 
-            BigDecimal itemTotal = product.getPrice().multiply(BigDecimal.valueOf(itemReq.getQuantity()));
+            BigDecimal itemTotal =
+                    product.getPrice().multiply(BigDecimal.valueOf(itemReq.getQuantity()));
             totalAmount = totalAmount.add(itemTotal);
 
-            OrderItem orderItem = OrderItem.builder()
-                    .order(order)
-                    .product(product)
-                    .quantity(itemReq.getQuantity())
-                    .price(product.getPrice())
-                    .build();
+            OrderItem orderItem =
+                    OrderItem.builder()
+                            .order(order)
+                            .product(product)
+                            .quantity(itemReq.getQuantity())
+                            .price(product.getPrice())
+                            .build();
 
             order.getItems().add(orderItem);
         }
@@ -84,8 +98,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderResponse> getUserOrders(String userEmail) {
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + userEmail));
+        User user =
+                userRepository
+                        .findByEmail(userEmail)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "User not found with email: " + userEmail));
         return orderRepository.findByUserId(user.getId()).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
@@ -93,8 +112,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse getOrderById(Long orderId, String userEmail) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+        Order order =
+                orderRepository
+                        .findById(orderId)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Order not found with id: " + orderId));
 
         if (!order.getUser().getEmail().equals(userEmail)) {
             throw new ResourceNotFoundException("Unauthorized to view this order.");
@@ -106,8 +130,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse updateOrderStatus(Long orderId, OrderStatus status) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+        Order order =
+                orderRepository
+                        .findById(orderId)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Order not found with id: " + orderId));
 
         order.setStatus(status);
         Order updatedOrder = orderRepository.save(order);
@@ -115,15 +144,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderResponse mapToResponse(Order order) {
-        List<OrderItemResponse> itemResponses = order.getItems().stream()
-                .map(item -> OrderItemResponse.builder()
-                        .id(item.getId())
-                        .productId(item.getProduct().getId())
-                        .productName(item.getProduct().getName())
-                        .quantity(item.getQuantity())
-                        .price(item.getPrice())
-                        .build())
-                .collect(Collectors.toList());
+        List<OrderItemResponse> itemResponses =
+                order.getItems().stream()
+                        .map(
+                                item ->
+                                        OrderItemResponse.builder()
+                                                .id(item.getId())
+                                                .productId(item.getProduct().getId())
+                                                .productName(item.getProduct().getName())
+                                                .quantity(item.getQuantity())
+                                                .price(item.getPrice())
+                                                .build())
+                        .collect(Collectors.toList());
 
         return OrderResponse.builder()
                 .id(order.getId())

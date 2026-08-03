@@ -5,17 +5,16 @@ import com.ecommerce.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Sort;
 
 @Slf4j
 @RestController
@@ -28,7 +27,8 @@ public class UserController {
     // --- Authenticated User Endpoints ---
 
     @GetMapping("/me")
-    public ResponseEntity<UserProfileResponse> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<UserProfileResponse> getCurrentUser(
+            @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(userService.getCurrentUserProfile(userDetails.getUsername()));
     }
 
@@ -52,7 +52,13 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<UserProfileResponse>> getAllUsers(
-            @ParameterObject @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+            @ParameterObject
+                    @PageableDefault(
+                            page = 0,
+                            size = 10,
+                            sort = "id",
+                            direction = Sort.Direction.ASC)
+                    Pageable pageable) {
         return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
@@ -65,16 +71,14 @@ public class UserController {
     @PatchMapping("/{id}/role")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserProfileResponse> updateUserRole(
-            @PathVariable Long id,
-            @Valid @RequestBody UpdateRoleRequest request) {
+            @PathVariable Long id, @Valid @RequestBody UpdateRoleRequest request) {
         return ResponseEntity.ok(userService.updateUserRole(id, request));
     }
 
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserProfileResponse> toggleUserStatus(
-            @PathVariable Long id,
-            @RequestParam boolean enabled) {
+            @PathVariable Long id, @RequestParam boolean enabled) {
         return ResponseEntity.ok(userService.toggleUserStatus(id, enabled));
     }
 

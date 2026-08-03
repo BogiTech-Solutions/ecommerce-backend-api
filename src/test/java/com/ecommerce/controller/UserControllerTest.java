@@ -31,14 +31,15 @@
 // @Import({SecurityConfig.class, JwtAuthenticationFilter.class})
 // class UserControllerTest {
 
-//     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(UserControllerTest.class);
+//     private static final org.slf4j.Logger logger =
+// org.slf4j.LoggerFactory.getLogger(UserControllerTest.class);
 
 //     @Value("${security.jwt.secret}")
 //     private String secretKey;
 
 //     @Value("${security.jwt.expiration}")
 //     private long jwtExpiration;
-    
+
 //     @Autowired
 //     private MockMvc mockMvc;
 
@@ -54,12 +55,12 @@
 //     @MockitoBean
 //     private AuthenticationProvider authenticationProvider;
 
-    
 //     @Test
 //     @WithMockUser(roles = "ADMIN")
 //     void getAllUsers_AsAdmin_Returns200OK() throws Exception {
 
-//         logger.info("Testing getAllUsers endpoint as ADMIN with JWT secret: {} and expiration: {}", secretKey, jwtExpiration);
+//         logger.info("Testing getAllUsers endpoint as ADMIN with JWT secret: {} and expiration:
+// {}", secretKey, jwtExpiration);
 
 //         UserProfileResponse profile = UserProfileResponse.builder()
 //                 .id(1L)

@@ -7,15 +7,14 @@ import com.ecommerce.entity.User;
 import com.ecommerce.repository.CategoryRepository;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.UserRepository;
+import java.math.BigDecimal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -44,14 +43,15 @@ public class DataSeeder implements CommandLineRunner {
 
         log.info("Seeding default Admin user...");
 
-        User admin = User.builder()
-                .firstName("Admin")
-                .lastName("User")
-                .email(adminEmail)
-                .password(passwordEncoder.encode("Admin123!"))
-                .role(Role.ROLE_ADMIN)
-                .enabled(true)
-                .build();
+        User admin =
+                User.builder()
+                        .firstName("Admin")
+                        .lastName("User")
+                        .email(adminEmail)
+                        .password(passwordEncoder.encode("Admin123!"))
+                        .role(Role.ROLE_ADMIN)
+                        .enabled(true)
+                        .build();
 
         userRepository.save(admin);
         log.info("Admin user seeded successfully with email: {}", adminEmail);
@@ -65,25 +65,22 @@ public class DataSeeder implements CommandLineRunner {
 
         log.info("Seeding categories and products...");
 
-        Category electronics = Category.builder()
-                .name("Electronics")
-                .description("Gadgets and devices")
-                .build();
+        Category electronics =
+                Category.builder().name("Electronics").description("Gadgets and devices").build();
 
-        Category fashion = Category.builder()
-                .name("Fashion")
-                .description("Apparel and footwear")
-                .build();
+        Category fashion =
+                Category.builder().name("Fashion").description("Apparel and footwear").build();
 
         categoryRepository.saveAll(List.of(electronics, fashion));
 
-        Product laptop = Product.builder()
-                .name("ProBook Laptop 15\"")
-                .description("High-performance laptop")
-                .price(new BigDecimal("1299.99"))
-                .stockQuantity(25)
-                .category(electronics)
-                .build();
+        Product laptop =
+                Product.builder()
+                        .name("ProBook Laptop 15\"")
+                        .description("High-performance laptop")
+                        .price(new BigDecimal("1299.99"))
+                        .stockQuantity(25)
+                        .category(electronics)
+                        .build();
 
         productRepository.save(laptop);
         log.info("Categories and products seeded successfully!");

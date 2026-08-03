@@ -1,11 +1,6 @@
 package com.ecommerce.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.ecommerce.config.EnvConfig;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -13,6 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileUploadService {
@@ -38,7 +35,7 @@ public class FileUploadService {
 
         String originalFileName = file.getOriginalFilename();
         String fileExtension = "";
-        
+
         if (originalFileName != null && originalFileName.contains(".")) {
             fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
         }
@@ -53,7 +50,8 @@ public class FileUploadService {
             }
             return newFileName;
         } catch (IOException ex) {
-            throw new RuntimeException("Could not store file " + originalFileName + ". Please try again!", ex);
+            throw new RuntimeException(
+                    "Could not store file " + originalFileName + ". Please try again!", ex);
         }
     }
 

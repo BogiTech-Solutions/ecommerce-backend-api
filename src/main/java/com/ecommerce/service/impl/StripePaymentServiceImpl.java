@@ -8,9 +8,8 @@ import com.ecommerce.service.PaymentService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
+import org.springframework.stereotype.Service;
 
 @Service("stripePaymentService")
 public class StripePaymentServiceImpl implements PaymentService {
@@ -33,29 +32,37 @@ public class StripePaymentServiceImpl implements PaymentService {
             // Stripe expects amount in cents (e.g., $10.00 -> 1000)
             long amountInCents = request.getAmount().multiply(BigDecimal.valueOf(100)).longValue();
 
-            SessionCreateParams params = SessionCreateParams.builder()
-                    .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
-                    .setMode(SessionCreateParams.Mode.PAYMENT)
-                    .setCustomerEmail(request.getEmail())
-                    .setSuccessUrl(request.getCallbackUrl() + "?session_id={CHECKOUT_SESSION_ID}&orderId=" + request.getOrderId())
-                    .setCancelUrl(request.getCallbackUrl() + "?canceled=true")
-                    .addLineItem(
-                            SessionCreateParams.LineItem.builder()
-                                    .setQuantity(1L)
-                                    .setPriceData(
-                                            SessionCreateParams.LineItem.PriceData.builder()
-                                                    .setCurrency(request.getCurrency().toLowerCase())
-                                                    .setUnitAmount(amountInCents)
-                                                    .setProductData(
-                                                            SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                                    .setName("Order #" + request.getOrderId())
-                                                                    .build()
-                                                    )
-                                                    .build()
-                                    )
-                                    .build()
-                    )
-                    .build();
+            SessionCreateParams params =
+                    SessionCreateParams.builder()
+                            .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                            .setMode(SessionCreateParams.Mode.PAYMENT)
+                            .setCustomerEmail(request.getEmail())
+                            .setSuccessUrl(
+                                    request.getCallbackUrl()
+                                            + "?session_id={CHECKOUT_SESSION_ID}&orderId="
+                                            + request.getOrderId())
+                            .setCancelUrl(request.getCallbackUrl() + "?canceled=true")
+                            .addLineItem(
+                                    SessionCreateParams.LineItem.builder()
+                                            .setQuantity(1L)
+                                            .setPriceData(
+                                                    SessionCreateParams.LineItem.PriceData.builder()
+                                                            .setCurrency(
+                                                                    request.getCurrency()
+                                                                            .toLowerCase())
+                                                            .setUnitAmount(amountInCents)
+                                                            .setProductData(
+                                                                    SessionCreateParams.LineItem
+                                                                            .PriceData.ProductData
+                                                                            .builder()
+                                                                            .setName(
+                                                                                    "Order #"
+                                                                                            + request
+                                                                                                    .getOrderId())
+                                                                            .build())
+                                                            .build())
+                                            .build())
+                            .build();
 
             Session session = Session.create(params);
 

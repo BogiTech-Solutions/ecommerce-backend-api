@@ -50,20 +50,29 @@ public class UserService {
     // --- Admin Operations ---
 
     public Page<UserProfileResponse> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable)
-                .map(this::mapToProfileResponse);
+        return userRepository.findAll(pageable).map(this::mapToProfileResponse);
     }
 
     public UserProfileResponse getUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        User user =
+                userRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "User not found with id: " + id));
         return mapToProfileResponse(user);
     }
 
     @Transactional
     public UserProfileResponse updateUserRole(Long id, UpdateRoleRequest request) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        User user =
+                userRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "User not found with id: " + id));
 
         user.setRole(request.getRole());
         return mapToProfileResponse(userRepository.save(user));
@@ -71,8 +80,13 @@ public class UserService {
 
     @Transactional
     public UserProfileResponse toggleUserStatus(Long id, boolean enabled) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        User user =
+                userRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "User not found with id: " + id));
 
         user.setEnabled(enabled);
         return mapToProfileResponse(userRepository.save(user));
@@ -89,8 +103,10 @@ public class UserService {
     // --- Helpers ---
 
     private User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("User not found with email: " + email));
     }
 
     private UserProfileResponse mapToProfileResponse(User user) {

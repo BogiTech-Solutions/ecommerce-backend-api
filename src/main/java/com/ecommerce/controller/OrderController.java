@@ -7,6 +7,7 @@ import com.ecommerce.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
@@ -35,33 +34,29 @@ public class OrderController {
     @PostMapping
     @Operation(summary = "Checkout / Place a new order")
     public ResponseEntity<OrderResponse> createOrder(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody OrderRequest request
-    ) {
-        return new ResponseEntity<>(orderService.createOrder(userDetails.getUsername(), request), HttpStatus.CREATED);
+            @AuthenticationPrincipal UserDetails userDetails, @RequestBody OrderRequest request) {
+        return new ResponseEntity<>(
+                orderService.createOrder(userDetails.getUsername(), request), HttpStatus.CREATED);
     }
 
     @GetMapping
     @Operation(summary = "Get current authenticated user's order history")
-    public ResponseEntity<List<OrderResponse>> getUserOrders(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<OrderResponse>> getUserOrders(
+            @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(orderService.getUserOrders(userDetails.getUsername()));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get order details by Order ID")
     public ResponseEntity<OrderResponse> getOrderById(
-            @PathVariable Long id,
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
+            @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(orderService.getOrderById(id, userDetails.getUsername()));
     }
 
     @PatchMapping("/{id}/status")
     @Operation(summary = "Update order status (Admin only)")
     public ResponseEntity<OrderResponse> updateOrderStatus(
-            @PathVariable Long id,
-            @RequestParam OrderStatus status
-    ) {
+            @PathVariable Long id, @RequestParam OrderStatus status) {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
     }
 }

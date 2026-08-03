@@ -3,7 +3,6 @@ package com.ecommerce.service;
 import com.ecommerce.dto.PageResponse;
 import com.ecommerce.dto.ProductRequest;
 import com.ecommerce.dto.ProductResponse;
-
 import java.util.List;
 
 public interface ProductService {
@@ -11,7 +10,8 @@ public interface ProductService {
 
     List<ProductResponse> getAllProducts();
 
-    PageResponse<ProductResponse> getPaginatedProducts(int page, int size, String sortBy, String sortDir);
+    PageResponse<ProductResponse> getPaginatedProducts(
+            int page, int size, String sortBy, String sortDir);
 
     ProductResponse getProductById(Long id);
 

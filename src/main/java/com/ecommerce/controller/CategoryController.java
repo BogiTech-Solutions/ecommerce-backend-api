@@ -6,6 +6,7 @@ import com.ecommerce.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
@@ -29,7 +28,9 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    @Operation(summary = "Get all categories", description = "Public endpoint to retrieve all available categories")
+    @Operation(
+            summary = "Get all categories",
+            description = "Public endpoint to retrieve all available categories")
     public ResponseEntity<List<CategoryResponse>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
@@ -50,8 +51,8 @@ public class CategoryController {
     @PutMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Update an existing category", description = "Admin only")
-    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id,
-            @RequestBody CategoryRequest request) {
+    public ResponseEntity<CategoryResponse> updateCategory(
+            @PathVariable Long id, @RequestBody CategoryRequest request) {
         return ResponseEntity.ok(categoryService.updateCategory(id, request));
     }
 

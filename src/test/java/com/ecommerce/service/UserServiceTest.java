@@ -1,9 +1,14 @@
 package com.ecommerce.service;
 
-import com.ecommerce.entity.User;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import com.ecommerce.dto.user.UserProfileResponse;
 import com.ecommerce.entity.Role;
+import com.ecommerce.entity.User;
 import com.ecommerce.repository.UserRepository;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,33 +21,26 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
+    @Mock private UserRepository userRepository;
 
-    @InjectMocks
-    private UserService userService;
+    @InjectMocks private UserService userService;
 
     private User testUser;
 
     @BeforeEach
     void setUp() {
-        testUser = User.builder()
-                .id(1L)
-                .email("admin@ecommerce.com")
-                .firstName("Admin")
-                .lastName("User")
-                .role(Role.ROLE_ADMIN)
-                .enabled(true)
-                .build();
+        testUser =
+                User.builder()
+                        .id(1L)
+                        .email("admin@ecommerce.com")
+                        .firstName("Admin")
+                        .lastName("User")
+                        .role(Role.ROLE_ADMIN)
+                        .enabled(true)
+                        .build();
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.ecommerce.service.impl;
 
+import com.ecommerce.dto.PageResponse;
 import com.ecommerce.dto.ProductRequest;
 import com.ecommerce.dto.ProductResponse;
 import com.ecommerce.entity.Category;
@@ -8,16 +9,14 @@ import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.repository.CategoryRepository;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.service.ProductService;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import com.ecommerce.dto.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -27,17 +26,20 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public PageResponse<ProductResponse> getPaginatedProducts(int page, int size, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
+    public PageResponse<ProductResponse> getPaginatedProducts(
+            int page, int size, String sortBy, String sortDir) {
+        Sort sort =
+                sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                        ? Sort.by(sortBy).ascending()
+                        : Sort.by(sortBy).descending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Product> productPage = productRepository.findAll(pageable);
 
-        List<ProductResponse> content = productPage.getContent().stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+        List<ProductResponse> content =
+                productPage.getContent().stream()
+                        .map(this::mapToResponse)
+                        .collect(Collectors.toList());
 
         return PageResponse.<ProductResponse>builder()
                 .content(content)
@@ -51,17 +53,24 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse createProduct(ProductRequest request) {
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + request.getCategoryId()));
+        Category category =
+                categoryRepository
+                        .findById(request.getCategoryId())
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "Category not found with id: "
+                                                        + request.getCategoryId()));
 
-        Product product = Product.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .price(request.getPrice())
-                .stockQuantity(request.getStockQuantity())
-                .imageUrl(request.getImageUrl())
-                .category(category)
-                .build();
+        Product product =
+                Product.builder()
+                        .name(request.getName())
+                        .description(request.getDescription())
+                        .price(request.getPrice())
+                        .stockQuantity(request.getStockQuantity())
+                        .imageUrl(request.getImageUrl())
+                        .category(category)
+                        .build();
 
         Product savedProduct = productRepository.save(product);
         return mapToResponse(savedProduct);
@@ -76,8 +85,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProductById(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+        Product product =
+                productRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () -> new RuntimeException("Product not found with id: " + id));
         return mapToResponse(product);
     }
 
@@ -93,11 +105,20 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse updateProduct(Long id, ProductRequest request) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+        Product product =
+                productRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () -> new RuntimeException("Product not found with id: " + id));
 
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + request.getCategoryId()));
+        Category category =
+                categoryRepository
+                        .findById(request.getCategoryId())
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "Category not found with id: "
+                                                        + request.getCategoryId()));
 
         product.setName(request.getName());
         product.setDescription(request.getDescription());

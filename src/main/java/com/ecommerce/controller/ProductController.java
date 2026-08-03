@@ -1,11 +1,13 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.dto.PageResponse;
 import com.ecommerce.dto.ProductRequest;
 import com.ecommerce.dto.ProductResponse;
 import com.ecommerce.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.ecommerce.dto.PageResponse;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -31,7 +30,9 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/page")
-    @Operation(summary = "Get paginated products", description = "Public endpoint to fetch products with pagination and sorting")
+    @Operation(
+            summary = "Get paginated products",
+            description = "Public endpoint to fetch products with pagination and sorting")
     public ResponseEntity<PageResponse<ProductResponse>> getPaginatedProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -41,7 +42,9 @@ public class ProductController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all products", description = "Public endpoint to list all available products")
+    @Operation(
+            summary = "Get all products",
+            description = "Public endpoint to list all available products")
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
@@ -54,7 +57,8 @@ public class ProductController {
 
     @GetMapping("/category/{categoryId}")
     @Operation(summary = "Get products by Category ID")
-    public ResponseEntity<List<ProductResponse>> getProductsByCategory(@PathVariable Long categoryId) {
+    public ResponseEntity<List<ProductResponse>> getProductsByCategory(
+            @PathVariable Long categoryId) {
         return ResponseEntity.ok(productService.getProductsByCategory(categoryId));
     }
 
@@ -68,7 +72,8 @@ public class ProductController {
     @PutMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Update product details")
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductRequest request) {
+    public ResponseEntity<ProductResponse> updateProduct(
+            @PathVariable Long id, @RequestBody ProductRequest request) {
         return ResponseEntity.ok(productService.updateProduct(id, request));
     }
 

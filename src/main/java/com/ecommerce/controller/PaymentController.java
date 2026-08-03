@@ -3,7 +3,6 @@ package com.ecommerce.controller;
 import com.ecommerce.dto.PaymentRequest;
 import com.ecommerce.dto.PaymentResponse;
 import com.ecommerce.service.PaymentService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,8 +25,7 @@ public class PaymentController {
 
     public PaymentController(
             @Qualifier("stripePaymentService") PaymentService stripePaymentService,
-            @Qualifier("chapaPaymentService") PaymentService chapaPaymentService
-    ) {
+            @Qualifier("chapaPaymentService") PaymentService chapaPaymentService) {
         this.stripePaymentService = stripePaymentService;
         this.chapaPaymentService = chapaPaymentService;
     }
@@ -49,9 +47,7 @@ public class PaymentController {
     @GetMapping("/verify/{gateway}/{txRef}")
     @Operation(summary = "Verify transaction status by provider")
     public ResponseEntity<Boolean> verifyPayment(
-            @PathVariable String gateway,
-            @PathVariable String txRef
-    ) {
+            @PathVariable String gateway, @PathVariable String txRef) {
         if ("chapa".equalsIgnoreCase(gateway)) {
             return ResponseEntity.ok(chapaPaymentService.verifyPayment(txRef));
         } else if ("stripe".equalsIgnoreCase(gateway)) {
