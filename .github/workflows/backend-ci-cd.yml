@@ -21,9 +21,9 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_DB: ecommerce_test_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgrespassword
+          SPRING_DATASOURCE_DB: ecommerce_test_db
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: postgrespassword
         ports:
           - 5432:5432
         options: >-
