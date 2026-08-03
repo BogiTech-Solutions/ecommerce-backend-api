@@ -15,20 +15,13 @@ app:
 # 2. Standard Spring Framework Configuration (Must be at root level)
 spring:
   datasource:
-<<<<<<< HEAD
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
-=======
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
->>>>>>> caf2501 (Outsource enviroment variable from source code)
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-<<<<<<< HEAD
       ddl-auto: update
 
 application:
@@ -51,6 +44,3 @@ security:
     expiration: ${JWT_EXPIRATION_MS:86400000}
 file:
   upload-dir: ./uploads
-=======
-      ddl-auto: update
->>>>>>> caf2501 (Outsource enviroment variable from source code)

@@ -15,12 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUploadService {
 
     private final Path fileStorageLocation;
-    private final Path uploadLocation;
+
+    // private final Path uploadLocation;
 
     public FileUploadService(EnvConfig envConfig) {
         String dir = envConfig.file().uploadDir();
         this.fileStorageLocation = Paths.get(dir).toAbsolutePath().normalize();
-        this.uploadLocation = this.fileStorageLocation;
+        // this.uploadLocation = this.fileStorageLocation;
         try {
             Files.createDirectories(this.fileStorageLocation);
         } catch (IOException ex) {

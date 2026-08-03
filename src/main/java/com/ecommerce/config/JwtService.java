@@ -4,44 +4,28 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-<<<<<<< HEAD
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-=======
->>>>>>> 04d9005 (Code linter and formatter setup completed)
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import javax.crypto.SecretKey;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 @Service
 public class JwtService {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     @Value("${security.jwt.secret}")
     private String secretKey;
-=======
-    // @Value("${security.jwt.secret}")
-    private String secretKey="404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
->>>>>>> caf2501 (Outsource enviroment variable from source code)
-=======
-    private final EnvConfig envConfig;
->>>>>>> 04d9005 (Code linter and formatter setup completed)
 
-    // Inject central EnvConfig bean
-    public JwtService(EnvConfig envConfig) {
-        this.envConfig = envConfig;
-    }
+    // @Value("${security.jwt.expiration}")
+    private long jwtExpiration=1000 * 60 * 60 * 24; // 24 hours
 
     public String extractUsername(String token) {
+
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -55,8 +39,6 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        long jwtExpiration = envConfig.security().jwt().expiration();
-
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
@@ -88,12 +70,6 @@ public class JwtService {
     }
 
     private SecretKey getSignInKey() {
-        // Option 1: Accessing using your custom helper method in EnvConfig
-        String secretKey = envConfig.getSigningKey();
-
-        // Option 2 (Alternative): Accessing directly via record path:
-        // String secretKey = envConfig.security().jwt().secret();
-
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }

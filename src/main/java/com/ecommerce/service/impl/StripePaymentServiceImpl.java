@@ -9,17 +9,18 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import java.math.BigDecimal;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service("stripePaymentService")
 public class StripePaymentServiceImpl implements PaymentService {
 
-<<<<<<< HEAD
     @Value("${payment.stripe.secret-key}")
     private String secretKey;
-=======
+
     private final String stripeSecretKey;
->>>>>>> caf2501 (Outsource enviroment variable from source code)
+
 
     public StripePaymentServiceImpl(EnvConfig envConfig) {
         // Strongly typed, centralized access!

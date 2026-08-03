@@ -15,13 +15,8 @@ import org.springframework.web.client.RestClient;
 @Service("chapaPaymentService")
 public class ChapaPaymentServiceImpl implements PaymentService {
 
-<<<<<<< HEAD
     @Value("${payment.chapa.secret-key:}")
     private String chapaSecretKey;
-=======
-    // @Value("${payment.chapa.secret-key:}")
-    private String chapaSecretKey = "CHASECK_TEST-v9x..."; // Replace with your
->>>>>>> 04d9005 (Code linter and formatter setup completed)
 
     @Value("${payment.chapa.base-url}")
     private String baseUrl;
