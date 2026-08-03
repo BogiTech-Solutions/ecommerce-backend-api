@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ecommerce.config.EnvConfig;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -16,9 +18,12 @@ import java.util.UUID;
 public class FileUploadService {
 
     private final Path fileStorageLocation;
+    private final Path uploadLocation;
 
-    public FileUploadService(@Value("${file.upload-dir:./uploads}") String uploadDir) {
-        this.fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
+    public FileUploadService(EnvConfig envConfig) {
+        String dir = envConfig.file().uploadDir();
+        this.fileStorageLocation = Paths.get(dir).toAbsolutePath().normalize();
+        this.uploadLocation = this.fileStorageLocation;
         try {
             Files.createDirectories(this.fileStorageLocation);
         } catch (IOException ex) {

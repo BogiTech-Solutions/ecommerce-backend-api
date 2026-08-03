@@ -1,15 +1,13 @@
 package com.ecommerce.service.impl;
 
+import com.ecommerce.config.EnvConfig;
 import com.ecommerce.dto.PaymentRequest;
 import com.ecommerce.dto.PaymentResponse;
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.service.PaymentService;
-import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,12 +15,16 @@ import java.math.BigDecimal;
 @Service("stripePaymentService")
 public class StripePaymentServiceImpl implements PaymentService {
 
+<<<<<<< HEAD
     @Value("${payment.stripe.secret-key}")
     private String secretKey;
+=======
+    private final String stripeSecretKey;
+>>>>>>> caf2501 (Outsource enviroment variable from source code)
 
-    @PostConstruct
-    public void init() {
-        Stripe.apiKey = secretKey;
+    public StripePaymentServiceImpl(EnvConfig envConfig) {
+        // Strongly typed, centralized access!
+        this.stripeSecretKey = envConfig.payment().stripe().secretKey();
     }
 
     @Override

@@ -18,11 +18,16 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+<<<<<<< HEAD
     @Value("${security.jwt.secret}")
     private String secretKey;
+=======
+    // @Value("${security.jwt.secret}")
+    private String secretKey="404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+>>>>>>> caf2501 (Outsource enviroment variable from source code)
 
     // @Value("${security.jwt.expiration}")
-    private long jwtExpiration=1000 * 60 * 60 * 24; // 24 hours
+    private long jwtExpiration=86400000; // 24 hours in milliseconds
 
     public String extractUsername(String token) {
 
