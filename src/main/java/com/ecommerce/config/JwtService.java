@@ -17,15 +17,17 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+    private final EnvConfig envConfig;
 
     @Value("${security.jwt.secret}")
     private String secretKey;
 
-    // @Value("${security.jwt.expiration}")
-    private long jwtExpiration=1000 * 60 * 60 * 24; // 24 hours
+    // Inject central EnvConfig bean
+    public JwtService(EnvConfig envConfig) {
+        this.envConfig = envConfig;
+    }
 
     public String extractUsername(String token) {
-
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -39,6 +41,8 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        long jwtExpiration = envConfig.security().jwt().expiration();
+
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
@@ -70,6 +74,12 @@ public class JwtService {
     }
 
     private SecretKey getSignInKey() {
+        // Option 1: Accessing using your custom helper method in EnvConfig
+        String secretKey = envConfig.getSigningKey();
+
+        // Option 2 (Alternative): Accessing directly via record path:
+        // String secretKey = envConfig.security().jwt().secret();
+
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }

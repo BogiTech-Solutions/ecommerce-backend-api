@@ -15,9 +15,9 @@ app:
 # 2. Standard Spring Framework Configuration (Must be at root level)
 spring:
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -27,8 +27,8 @@ spring:
 application:
   security:
     jwt:
-      secret: ${JWT_SECRET}
-      expiration: ${JWT_EXPIRATION_MS:86400000}
+      secret: ${SECURITY_JWT_SECRET}
+      expiration: ${SECURITY_JWT_EXPIRATION:86400000}
 
 payment:
   stripe:
@@ -40,7 +40,7 @@ payment:
     base-url: https://api.chapa.co/v1
 security:
   jwt:
-    secret: ${JWT_SECRET}
-    expiration: ${JWT_EXPIRATION_MS:86400000}
+    secret: ${SECURITY_JWT_SECRET}
+    expiration: ${SECURITY_JWT_EXPIRATION:86400000}
 file:
   upload-dir: ./uploads
