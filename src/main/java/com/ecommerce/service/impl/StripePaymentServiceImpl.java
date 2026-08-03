@@ -9,7 +9,6 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import java.math.BigDecimal;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,6 @@ public class StripePaymentServiceImpl implements PaymentService {
     private String secretKey;
 
     private final String stripeSecretKey;
-
 
     public StripePaymentServiceImpl(EnvConfig envConfig) {
         // Strongly typed, centralized access!
