@@ -76,7 +76,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-api:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-api:${{ github.sha }}
             
-  # --- STAGE 3: Trigger Deployment ---
+  # --- STAGE 3: Trigger Deployment  ---
   deploy:
     name: Deploy to Production
     needs: build-and-push
