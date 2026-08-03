@@ -21,26 +21,25 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @Tag(name = "File Uploads", description = "Endpoints for uploading media assets")
 public class FileUploadController {
 
-    private final FileUploadService fileUploadService;
+  private final FileUploadService fileUploadService;
 
-    @PostMapping(value = "./upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @SecurityRequirement(name = "bearerAuth")
-    @Operation(
-            summary = "Upload an image/file",
-            description = "Returns the accessible URL for the uploaded file")
-    public ResponseEntity<Map<String, String>> uploadFile(
-            @RequestParam("file") MultipartFile file) {
-        String fileName = fileUploadService.storeFile(file);
+  @PostMapping(value = "./upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @SecurityRequirement(name = "bearerAuth")
+  @Operation(
+      summary = "Upload an image/file",
+      description = "Returns the accessible URL for the uploaded file")
+  public ResponseEntity<Map<String, String>> uploadFile(@RequestParam("file") MultipartFile file) {
+    String fileName = fileUploadService.storeFile(file);
 
-        String fileDownloadUri =
-                ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/uploads/")
-                        .path(fileName)
-                        .toUriString();
+    String fileDownloadUri =
+        ServletUriComponentsBuilder.fromCurrentContextPath()
+            .path("/uploads/")
+            .path(fileName)
+            .toUriString();
 
-        return ResponseEntity.ok(
-                Map.of(
-                        "fileName", fileName,
-                        "fileUrl", fileDownloadUri));
-    }
+    return ResponseEntity.ok(
+        Map.of(
+            "fileName", fileName,
+            "fileUrl", fileDownloadUri));
+  }
 }

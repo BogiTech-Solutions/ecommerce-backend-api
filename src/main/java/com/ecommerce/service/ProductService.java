@@ -6,18 +6,18 @@ import com.ecommerce.dto.ProductResponse;
 import java.util.List;
 
 public interface ProductService {
-    ProductResponse createProduct(ProductRequest request);
+  ProductResponse createProduct(ProductRequest request);
 
-    List<ProductResponse> getAllProducts();
+  List<ProductResponse> getAllProducts();
 
-    PageResponse<ProductResponse> getPaginatedProducts(
-            int page, int size, String sortBy, String sortDir);
+  PageResponse<ProductResponse> getPaginatedProducts(
+      int page, int size, String sortBy, String sortDir);
 
-    ProductResponse getProductById(Long id);
+  ProductResponse getProductById(Long id);
 
-    List<ProductResponse> getProductsByCategory(Long categoryId);
+  List<ProductResponse> getProductsByCategory(Long categoryId);
 
-    ProductResponse updateProduct(Long id, ProductRequest request);
+  ProductResponse updateProduct(Long id, ProductRequest request);
 
-    void deleteProduct(Long id);
+  void deleteProduct(Long id);
 }

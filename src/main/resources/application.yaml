@@ -3,15 +3,17 @@ app:
   security:
     jwt:
       secret: ${SECURITY_JWT_SECRET}
-      expiration: ${SECURITY_JWT_EXPIRATION}
+      expiration: ${SECURITY_JWT_EXPIRATION:86400000}
   payment:
     stripe:
       secret-key: ${STRIPE_SECRET_KEY}
+      webhook-secret: ${STRIPE_WEBHOOK_SECRET}
     chapa:
       secret-key: ${CHAPA_SECRET_KEY}
+      webhook-secret: ${CHAPA_WEBHOOK_SECRET}
+      base-url: https://api.chapa.co/v1
   file:
-    upload-dir: ${FILE_UPLOAD_DIR}
-
+    upload-dir: ./uploads
 # 2. Standard Spring Framework Configuration (Must be at root level)
 spring:
   datasource:
@@ -24,23 +26,4 @@ spring:
     hibernate:
       ddl-auto: update
 
-application:
-  security:
-    jwt:
-      secret: ${SECURITY_JWT_SECRET}
-      expiration: ${SECURITY_JWT_EXPIRATION:86400000}
 
-payment:
-  stripe:
-    secret-key: ${STRIPE_SECRET_KEY}
-    webhook-secret: ${STRIPE_WEBHOOK_SECRET}
-  chapa:
-    secret-key: ${CHAPA_SECRET_KEY}
-    webhook-secret: ${CHAPA_WEBHOOK_SECRET}
-    base-url: https://api.chapa.co/v1
-security:
-  jwt:
-    secret: ${SECURITY_JWT_SECRET}
-    expiration: ${SECURITY_JWT_EXPIRATION:86400000}
-file:
-  upload-dir: ./uploads

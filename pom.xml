@@ -167,7 +167,7 @@
                         <!-- Apply Google Java Format -->
                         <googleJavaFormat>
                             <version>1.22.0</version>
-                            <style>AOSP</style> <!-- 4-space indentation style -->
+                            <!-- <style>AOSP</style>  -->
                         </googleJavaFormat>
                         <removeUnusedImports />
                         <trimTrailingWhitespace />

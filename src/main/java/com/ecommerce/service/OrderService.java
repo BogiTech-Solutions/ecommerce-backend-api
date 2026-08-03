@@ -6,11 +6,11 @@ import com.ecommerce.entity.OrderStatus;
 import java.util.List;
 
 public interface OrderService {
-    OrderResponse createOrder(String userEmail, OrderRequest request);
+  OrderResponse createOrder(String userEmail, OrderRequest request);
 
-    List<OrderResponse> getUserOrders(String userEmail);
+  List<OrderResponse> getUserOrders(String userEmail);
 
-    OrderResponse getOrderById(Long orderId, String userEmail);
+  OrderResponse getOrderById(Long orderId, String userEmail);
 
-    OrderResponse updateOrderStatus(Long orderId, OrderStatus status);
+  OrderResponse updateOrderStatus(Long orderId, OrderStatus status);
 }

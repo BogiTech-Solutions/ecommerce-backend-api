@@ -14,54 +14,54 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileUploadService {
 
-    private final Path fileStorageLocation;
+  private final Path fileStorageLocation;
 
-    // private final Path uploadLocation;
+  // private final Path uploadLocation;
 
-    public FileUploadService(EnvConfig envConfig) {
-        String dir = envConfig.file().uploadDir();
-        this.fileStorageLocation = Paths.get(dir).toAbsolutePath().normalize();
-        // this.uploadLocation = this.fileStorageLocation;
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (IOException ex) {
-            throw new RuntimeException("Could not create directory for uploaded files.", ex);
-        }
+  public FileUploadService(EnvConfig envConfig) {
+    String dir = envConfig.file().uploadDir();
+    this.fileStorageLocation = Paths.get(dir).toAbsolutePath().normalize();
+    // this.uploadLocation = this.fileStorageLocation;
+    try {
+      Files.createDirectories(this.fileStorageLocation);
+    } catch (IOException ex) {
+      throw new RuntimeException("Could not create directory for uploaded files.", ex);
+    }
+  }
+
+  public String storeFile(MultipartFile file) {
+    if (file.isEmpty()) {
+      throw new RuntimeException("Failed to store empty file.");
     }
 
-    public String storeFile(MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new RuntimeException("Failed to store empty file.");
-        }
+    String originalFileName = file.getOriginalFilename();
+    String fileExtension = "";
 
-        String originalFileName = file.getOriginalFilename();
-        String fileExtension = "";
-
-        if (originalFileName != null && originalFileName.contains(".")) {
-            fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        }
-
-        // Generate unique filename to avoid overwrites
-        String newFileName = UUID.randomUUID().toString() + fileExtension;
-
-        try {
-            Path targetLocation = this.fileStorageLocation.resolve(newFileName);
-            try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            }
-            return newFileName;
-        } catch (IOException ex) {
-            throw new RuntimeException(
-                    "Could not store file " + originalFileName + ". Please try again!", ex);
-        }
+    if (originalFileName != null && originalFileName.contains(".")) {
+      fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
     }
 
-    public void deleteFile(String fileName) {
-        try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
-            Files.deleteIfExists(filePath);
-        } catch (IOException ex) {
-            // Log warning or handle exception as needed
-        }
+    // Generate unique filename to avoid overwrites
+    String newFileName = UUID.randomUUID().toString() + fileExtension;
+
+    try {
+      Path targetLocation = this.fileStorageLocation.resolve(newFileName);
+      try (InputStream inputStream = file.getInputStream()) {
+        Files.copy(inputStream, targetLocation, StandardCopyOption.REPLACE_EXISTING);
+      }
+      return newFileName;
+    } catch (IOException ex) {
+      throw new RuntimeException(
+          "Could not store file " + originalFileName + ". Please try again!", ex);
     }
+  }
+
+  public void deleteFile(String fileName) {
+    try {
+      Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+      Files.deleteIfExists(filePath);
+    } catch (IOException ex) {
+      // Log warning or handle exception as needed
+    }
+  }
 }

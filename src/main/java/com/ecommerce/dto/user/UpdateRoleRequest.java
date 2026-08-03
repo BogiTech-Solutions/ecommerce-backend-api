@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class UpdateRoleRequest {
-    @NotNull(message = "Role is required")
-    private Role role;
+  @NotNull(message = "Role is required")
+  private Role role;
 }

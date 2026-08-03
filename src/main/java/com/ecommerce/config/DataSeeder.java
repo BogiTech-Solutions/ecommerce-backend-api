@@ -21,68 +21,68 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class DataSeeder implements CommandLineRunner {
 
-    private final CategoryRepository categoryRepository;
-    private final ProductRepository productRepository;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+  private final CategoryRepository categoryRepository;
+  private final ProductRepository productRepository;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-    @Override
-    @Transactional
-    public void run(String... args) {
-        seedAdminUser();
-        seedCategoriesAndProducts();
+  @Override
+  @Transactional
+  public void run(String... args) {
+    seedAdminUser();
+    seedCategoriesAndProducts();
+  }
+
+  private void seedAdminUser() {
+    String adminEmail = "admin@ecommerce.com";
+
+    if (userRepository.findByEmail(adminEmail).isPresent()) {
+      log.info("Admin user already exists. Skipping admin seeding...");
+      return;
     }
 
-    private void seedAdminUser() {
-        String adminEmail = "admin@ecommerce.com";
+    log.info("Seeding default Admin user...");
 
-        if (userRepository.findByEmail(adminEmail).isPresent()) {
-            log.info("Admin user already exists. Skipping admin seeding...");
-            return;
-        }
+    User admin =
+        User.builder()
+            .firstName("Admin")
+            .lastName("User")
+            .email(adminEmail)
+            .password(passwordEncoder.encode("Admin123!"))
+            .role(Role.ROLE_ADMIN)
+            .enabled(true)
+            .build();
 
-        log.info("Seeding default Admin user...");
+    userRepository.save(admin);
+    log.info("Admin user seeded successfully with email: {}", adminEmail);
+  }
 
-        User admin =
-                User.builder()
-                        .firstName("Admin")
-                        .lastName("User")
-                        .email(adminEmail)
-                        .password(passwordEncoder.encode("Admin123!"))
-                        .role(Role.ROLE_ADMIN)
-                        .enabled(true)
-                        .build();
-
-        userRepository.save(admin);
-        log.info("Admin user seeded successfully with email: {}", adminEmail);
+  private void seedCategoriesAndProducts() {
+    if (categoryRepository.count() > 0) {
+      log.info("Categories already seeded. Skipping product seeding...");
+      return;
     }
 
-    private void seedCategoriesAndProducts() {
-        if (categoryRepository.count() > 0) {
-            log.info("Categories already seeded. Skipping product seeding...");
-            return;
-        }
+    log.info("Seeding categories and products...");
 
-        log.info("Seeding categories and products...");
+    Category electronics =
+        Category.builder().name("Electronics").description("Gadgets and devices").build();
 
-        Category electronics =
-                Category.builder().name("Electronics").description("Gadgets and devices").build();
+    Category fashion =
+        Category.builder().name("Fashion").description("Apparel and footwear").build();
 
-        Category fashion =
-                Category.builder().name("Fashion").description("Apparel and footwear").build();
+    categoryRepository.saveAll(List.of(electronics, fashion));
 
-        categoryRepository.saveAll(List.of(electronics, fashion));
+    Product laptop =
+        Product.builder()
+            .name("ProBook Laptop 15\"")
+            .description("High-performance laptop")
+            .price(new BigDecimal("1299.99"))
+            .stockQuantity(25)
+            .category(electronics)
+            .build();
 
-        Product laptop =
-                Product.builder()
-                        .name("ProBook Laptop 15\"")
-                        .description("High-performance laptop")
-                        .price(new BigDecimal("1299.99"))
-                        .stockQuantity(25)
-                        .category(electronics)
-                        .build();
-
-        productRepository.save(laptop);
-        log.info("Categories and products seeded successfully!");
-    }
+    productRepository.save(laptop);
+    log.info("Categories and products seeded successfully!");
+  }
 }

@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentRequest {
-    private Long orderId;
-    private BigDecimal amount;
-    private String currency; // "USD" for Stripe, "ETB" for Chapa
-    private String email;
-    private String firstName;
-    private String lastName;
-    private String callbackUrl;
+  private Long orderId;
+  private BigDecimal amount;
+  private String currency; // "USD" for Stripe, "ETB" for Chapa
+  private String email;
+  private String firstName;
+  private String lastName;
+  private String callbackUrl;
 }

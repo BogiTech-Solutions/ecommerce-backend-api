@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentResponse {
-    private String transactionRef;
-    private String checkoutUrl; // URL where user completes payment (Stripe Checkout / Chapa Hosted)
-    private String status;
+  private String transactionRef;
+  private String checkoutUrl; // URL where user completes payment (Stripe Checkout / Chapa Hosted)
+  private String status;
 }

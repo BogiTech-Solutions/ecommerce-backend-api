@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderResponse {
-    private Long id;
-    private Long userId;
-    private BigDecimal totalAmount;
-    private OrderStatus status;
-    private LocalDateTime createdAt;
-    private List<OrderItemResponse> items;
+  private Long id;
+  private Long userId;
+  private BigDecimal totalAmount;
+  private OrderStatus status;
+  private LocalDateTime createdAt;
+  private List<OrderItemResponse> items;
 }

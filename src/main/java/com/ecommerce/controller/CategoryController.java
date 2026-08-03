@@ -25,42 +25,42 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Categories", description = "Endpoints for managing product categories")
 public class CategoryController {
 
-    private final CategoryService categoryService;
+  private final CategoryService categoryService;
 
-    @GetMapping
-    @Operation(
-            summary = "Get all categories",
-            description = "Public endpoint to retrieve all available categories")
-    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
-        return ResponseEntity.ok(categoryService.getAllCategories());
-    }
+  @GetMapping
+  @Operation(
+      summary = "Get all categories",
+      description = "Public endpoint to retrieve all available categories")
+  public ResponseEntity<List<CategoryResponse>> getAllCategories() {
+    return ResponseEntity.ok(categoryService.getAllCategories());
+  }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get category by ID")
-    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryService.getCategoryById(id));
-    }
+  @GetMapping("/{id}")
+  @Operation(summary = "Get category by ID")
+  public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id) {
+    return ResponseEntity.ok(categoryService.getCategoryById(id));
+  }
 
-    @PostMapping
-    @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Create a new category", description = "Admin only")
-    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
-        return new ResponseEntity<>(categoryService.createCategory(request), HttpStatus.CREATED);
-    }
+  @PostMapping
+  @SecurityRequirement(name = "bearerAuth")
+  @Operation(summary = "Create a new category", description = "Admin only")
+  public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
+    return new ResponseEntity<>(categoryService.createCategory(request), HttpStatus.CREATED);
+  }
 
-    @PutMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Update an existing category", description = "Admin only")
-    public ResponseEntity<CategoryResponse> updateCategory(
-            @PathVariable Long id, @RequestBody CategoryRequest request) {
-        return ResponseEntity.ok(categoryService.updateCategory(id, request));
-    }
+  @PutMapping("/{id}")
+  @SecurityRequirement(name = "bearerAuth")
+  @Operation(summary = "Update an existing category", description = "Admin only")
+  public ResponseEntity<CategoryResponse> updateCategory(
+      @PathVariable Long id, @RequestBody CategoryRequest request) {
+    return ResponseEntity.ok(categoryService.updateCategory(id, request));
+  }
 
-    @DeleteMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Delete a category", description = "Admin only")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{id}")
+  @SecurityRequirement(name = "bearerAuth")
+  @Operation(summary = "Delete a category", description = "Admin only")
+  public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+    categoryService.deleteCategory(id);
+    return ResponseEntity.noContent().build();
+  }
 }

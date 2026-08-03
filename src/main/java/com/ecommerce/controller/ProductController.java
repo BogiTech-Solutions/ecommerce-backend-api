@@ -27,61 +27,61 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Products", description = "Endpoints for managing inventory products")
 public class ProductController {
 
-    private final ProductService productService;
+  private final ProductService productService;
 
-    @GetMapping("/page")
-    @Operation(
-            summary = "Get paginated products",
-            description = "Public endpoint to fetch products with pagination and sorting")
-    public ResponseEntity<PageResponse<ProductResponse>> getPaginatedProducts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
-        return ResponseEntity.ok(productService.getPaginatedProducts(page, size, sortBy, sortDir));
-    }
+  @GetMapping("/page")
+  @Operation(
+      summary = "Get paginated products",
+      description = "Public endpoint to fetch products with pagination and sorting")
+  public ResponseEntity<PageResponse<ProductResponse>> getPaginatedProducts(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "id") String sortBy,
+      @RequestParam(defaultValue = "asc") String sortDir) {
+    return ResponseEntity.ok(productService.getPaginatedProducts(page, size, sortBy, sortDir));
+  }
 
-    @GetMapping
-    @Operation(
-            summary = "Get all products",
-            description = "Public endpoint to list all available products")
-    public ResponseEntity<List<ProductResponse>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
-    }
+  @GetMapping
+  @Operation(
+      summary = "Get all products",
+      description = "Public endpoint to list all available products")
+  public ResponseEntity<List<ProductResponse>> getAllProducts() {
+    return ResponseEntity.ok(productService.getAllProducts());
+  }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get product by ID")
-    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.getProductById(id));
-    }
+  @GetMapping("/{id}")
+  @Operation(summary = "Get product by ID")
+  public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
+    return ResponseEntity.ok(productService.getProductById(id));
+  }
 
-    @GetMapping("/category/{categoryId}")
-    @Operation(summary = "Get products by Category ID")
-    public ResponseEntity<List<ProductResponse>> getProductsByCategory(
-            @PathVariable Long categoryId) {
-        return ResponseEntity.ok(productService.getProductsByCategory(categoryId));
-    }
+  @GetMapping("/category/{categoryId}")
+  @Operation(summary = "Get products by Category ID")
+  public ResponseEntity<List<ProductResponse>> getProductsByCategory(
+      @PathVariable Long categoryId) {
+    return ResponseEntity.ok(productService.getProductsByCategory(categoryId));
+  }
 
-    @PostMapping
-    @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Create a new product", description = "Requires JWT authentication")
-    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest request) {
-        return new ResponseEntity<>(productService.createProduct(request), HttpStatus.CREATED);
-    }
+  @PostMapping
+  @SecurityRequirement(name = "bearerAuth")
+  @Operation(summary = "Create a new product", description = "Requires JWT authentication")
+  public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest request) {
+    return new ResponseEntity<>(productService.createProduct(request), HttpStatus.CREATED);
+  }
 
-    @PutMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Update product details")
-    public ResponseEntity<ProductResponse> updateProduct(
-            @PathVariable Long id, @RequestBody ProductRequest request) {
-        return ResponseEntity.ok(productService.updateProduct(id, request));
-    }
+  @PutMapping("/{id}")
+  @SecurityRequirement(name = "bearerAuth")
+  @Operation(summary = "Update product details")
+  public ResponseEntity<ProductResponse> updateProduct(
+      @PathVariable Long id, @RequestBody ProductRequest request) {
+    return ResponseEntity.ok(productService.updateProduct(id, request));
+  }
 
-    @DeleteMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Delete a product")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{id}")
+  @SecurityRequirement(name = "bearerAuth")
+  @Operation(summary = "Delete a product")
+  public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+    productService.deleteProduct(id);
+    return ResponseEntity.noContent().build();
+  }
 }

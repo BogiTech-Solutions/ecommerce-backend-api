@@ -29,34 +29,34 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Orders", description = "Endpoints for placing and viewing orders")
 public class OrderController {
 
-    private final OrderService orderService;
+  private final OrderService orderService;
 
-    @PostMapping
-    @Operation(summary = "Checkout / Place a new order")
-    public ResponseEntity<OrderResponse> createOrder(
-            @AuthenticationPrincipal UserDetails userDetails, @RequestBody OrderRequest request) {
-        return new ResponseEntity<>(
-                orderService.createOrder(userDetails.getUsername(), request), HttpStatus.CREATED);
-    }
+  @PostMapping
+  @Operation(summary = "Checkout / Place a new order")
+  public ResponseEntity<OrderResponse> createOrder(
+      @AuthenticationPrincipal UserDetails userDetails, @RequestBody OrderRequest request) {
+    return new ResponseEntity<>(
+        orderService.createOrder(userDetails.getUsername(), request), HttpStatus.CREATED);
+  }
 
-    @GetMapping
-    @Operation(summary = "Get current authenticated user's order history")
-    public ResponseEntity<List<OrderResponse>> getUserOrders(
-            @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(orderService.getUserOrders(userDetails.getUsername()));
-    }
+  @GetMapping
+  @Operation(summary = "Get current authenticated user's order history")
+  public ResponseEntity<List<OrderResponse>> getUserOrders(
+      @AuthenticationPrincipal UserDetails userDetails) {
+    return ResponseEntity.ok(orderService.getUserOrders(userDetails.getUsername()));
+  }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get order details by Order ID")
-    public ResponseEntity<OrderResponse> getOrderById(
-            @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(orderService.getOrderById(id, userDetails.getUsername()));
-    }
+  @GetMapping("/{id}")
+  @Operation(summary = "Get order details by Order ID")
+  public ResponseEntity<OrderResponse> getOrderById(
+      @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+    return ResponseEntity.ok(orderService.getOrderById(id, userDetails.getUsername()));
+  }
 
-    @PatchMapping("/{id}/status")
-    @Operation(summary = "Update order status (Admin only)")
-    public ResponseEntity<OrderResponse> updateOrderStatus(
-            @PathVariable Long id, @RequestParam OrderStatus status) {
-        return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
-    }
+  @PatchMapping("/{id}/status")
+  @Operation(summary = "Update order status (Admin only)")
+  public ResponseEntity<OrderResponse> updateOrderStatus(
+      @PathVariable Long id, @RequestParam OrderStatus status) {
+    return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
+  }
 }
