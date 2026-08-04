@@ -20,6 +20,7 @@ public class CorsConfig {
     // 2. Allowed Frontend Origins (Update as needed for production)
     config.setAllowedOriginPatterns(
         List.of(
+            "https://fast-commerce-five.vercel.app",
             "https://ecommerce-admin-two-phi.vercel.app",
             "http://localhost:3000", // React / Next.js
             "http://localhost:5173", // Vite / Vue / React
