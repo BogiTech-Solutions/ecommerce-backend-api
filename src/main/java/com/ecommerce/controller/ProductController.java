@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/products")
-@RequiredArgsConstructor
 @Tag(name = "Products", description = "Endpoints for managing inventory products")
 public class ProductController {
 
   private final ProductService productService;
+
+  public ProductController(ProductService productService) {
+    this.productService = productService;
+  }
 
   @GetMapping("/page")
   @Operation(
@@ -62,7 +64,7 @@ public class ProductController {
   @Operation(
       summary = "Search products by name or description",
       description = "Public endpoint to search products based on name or description")
-  public ResponseEntity<@Nullable Object> searchProducts(@RequestParam String query) {
+  public ResponseEntity<@Nullable Object> getSearchProducts(@RequestParam String query) {
     return ResponseEntity.ok(productService.searchProducts(query));
   }
 
