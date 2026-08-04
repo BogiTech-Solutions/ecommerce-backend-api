@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,6 +40,30 @@ public class ProductController {
       @RequestParam(defaultValue = "id") String sortBy,
       @RequestParam(defaultValue = "asc") String sortDir) {
     return ResponseEntity.ok(productService.getPaginatedProducts(page, size, sortBy, sortDir));
+  }
+
+  @GetMapping("/for-you")
+  @Operation(
+      summary = "Get products for you",
+      description = "Public endpoint to fetch products recommended for the user")
+  public ResponseEntity<@Nullable Object> getProductsForYou() {
+    return ResponseEntity.ok(productService.getProductsForYou());
+  }
+
+  @GetMapping("/popular")
+  @Operation(
+      summary = "Get popular products",
+      description = "Public endpoint to fetch popular products")
+  public ResponseEntity<@Nullable Object> getPopularProducts() {
+    return ResponseEntity.ok(productService.getPopularProducts());
+  }
+
+  @GetMapping("/search")
+  @Operation(
+      summary = "Search products by name or description",
+      description = "Public endpoint to search products based on name or description")
+  public ResponseEntity<@Nullable Object> searchProducts(@RequestParam String query) {
+    return ResponseEntity.ok(productService.searchProducts(query));
   }
 
   @GetMapping

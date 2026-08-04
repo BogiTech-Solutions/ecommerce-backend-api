@@ -12,6 +12,7 @@ import com.ecommerce.service.ProductService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -142,5 +143,33 @@ public class ProductServiceImpl implements ProductService {
         .categoryId(product.getCategory().getId())
         .categoryName(product.getCategory().getName())
         .build();
+  }
+
+  @Override
+  public @Nullable Object searchProducts(String query) {
+    return productRepository
+        .findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query)
+        .stream()
+        .map(this::mapToResponse)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public @Nullable Object getPopularProducts() {
+    // Placeholder for popular products logic. This could be based on sales, views, etc.
+    // For now, we will return the first 5 products as a placeholder.
+    return productRepository.findAll(PageRequest.of(0, 5)).getContent().stream()
+        .map(this::mapToResponse)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public @Nullable Object getProductsForYou() {
+    // Placeholder for personalized product recommendations. This could be based on user behavior,
+    // preferences, etc.
+    // For now, we will return the first 5 products as a placeholder.
+    return productRepository.findAll(PageRequest.of(0, 5)).getContent().stream()
+        .map(this::mapToResponse)
+        .collect(Collectors.toList());
   }
 }
