@@ -1,5 +1,6 @@
 # 1. Custom Application Configuration (Bound to EnvConfig record)
 app:
+  render-url: ${API_URL}
   security:
     jwt:
       secret: ${SECURITY_JWT_SECRET}
@@ -14,6 +15,7 @@ app:
       base-url: https://api.chapa.co/v1
   file:
     upload-dir: ./uploads
+
 # 2. Standard Spring Framework Configuration (Must be at root level)
 spring:
   datasource:

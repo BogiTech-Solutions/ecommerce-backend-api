@@ -8,8 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableScheduling
 @EnableConfigurationProperties(EnvConfig.class) // Enable our central config class
 public class EcommerceApplication {
   public static void main(String[] args) {
