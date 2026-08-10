@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,6 +35,7 @@ public class AdController {
 
   // POST /api/ads - Create a new ad (Admin feature)
   @PostMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<Ad> createAd(@Valid @RequestBody Ad ad) {
     Ad createdAd = adService.createAd(ad);
     return ResponseEntity.status(HttpStatus.CREATED).body(createdAd);
@@ -41,6 +43,7 @@ public class AdController {
 
   // DELETE /api/ads/{id} - Delete an ad by ID (Admin feature)
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<Void> deleteAd(@PathVariable Long id) {
     adService.deleteAd(id);
     return ResponseEntity.noContent().build();

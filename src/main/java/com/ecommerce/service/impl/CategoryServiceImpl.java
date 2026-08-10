@@ -23,7 +23,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     Category category =
-        Category.builder().name(request.getName()).description(request.getDescription()).build();
+        Category.builder()
+            .name(request.getName())
+            .slug(request.getSlug())
+            .description(request.getDescription())
+            .build();
 
     Category savedCategory = categoryRepository.save(category);
     return mapToResponse(savedCategory);
