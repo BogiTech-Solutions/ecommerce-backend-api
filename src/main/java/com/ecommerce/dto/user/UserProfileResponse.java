@@ -12,6 +12,8 @@ public class UserProfileResponse {
   private String email;
   private String firstName;
   private String lastName;
+  private String avator;
+  private String phone;
   private Role role;
   private boolean enabled;
   private LocalDateTime createdAt;

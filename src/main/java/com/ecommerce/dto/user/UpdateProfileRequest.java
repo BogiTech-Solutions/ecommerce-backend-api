@@ -1,13 +1,12 @@
 package com.ecommerce.dto.user;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class UpdateProfileRequest {
-  @NotBlank(message = "First name is required")
   private String firstName;
-
-  @NotBlank(message = "Last name is required")
   private String lastName;
+  private MultipartFile avator;
+  private String phone;
 }

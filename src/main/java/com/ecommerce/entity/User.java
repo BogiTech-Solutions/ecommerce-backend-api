@@ -56,6 +56,10 @@ public class User implements UserDetails {
   @Column(nullable = false)
   private Role role;
 
+  @Column private String avator;
+
+  @Column private String phone;
+
   @Builder.Default
   @Column(nullable = false)
   private boolean enabled = true;

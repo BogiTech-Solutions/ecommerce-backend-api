@@ -110,6 +110,8 @@ public class UserService {
         .lastName(user.getLastName())
         .role(user.getRole())
         .enabled(user.isEnabled())
+        .phone(user.getPhone())
+        .avator(user.getAvator())
         .createdAt(user.getCreatedAt())
         .build();
   }

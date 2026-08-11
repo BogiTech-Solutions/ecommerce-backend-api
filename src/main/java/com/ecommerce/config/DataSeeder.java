@@ -50,6 +50,8 @@ public class DataSeeder implements CommandLineRunner {
             .email(adminEmail)
             .password(passwordEncoder.encode("Admin123!"))
             .role(Role.ROLE_ADMIN)
+            .avator("adminEmail")
+            .phone("+251923872187")
             .enabled(true)
             .build();
 
