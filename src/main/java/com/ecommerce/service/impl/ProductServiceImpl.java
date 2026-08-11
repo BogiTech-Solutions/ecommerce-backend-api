@@ -8,6 +8,7 @@ import com.ecommerce.entity.Product;
 import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.repository.CategoryRepository;
 import com.ecommerce.repository.ProductRepository;
+import com.ecommerce.service.FileUploadService;
 import com.ecommerce.service.ProductService;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,11 +19,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+  private final FileUploadService uploadService;
   private final ProductRepository productRepository;
   private final CategoryRepository categoryRepository;
 
@@ -65,10 +68,21 @@ public class ProductServiceImpl implements ProductService {
             .description(request.getDescription())
             .price(request.getPrice())
             .stockQuantity(request.getStockQuantity())
-            .imageUrl(request.getImageUrl())
             .category(category)
             .build();
 
+    if (request.getImage() != null && !request.getImage().isEmpty()) {
+
+      final String fileName = uploadService.storeFile(request.getImage());
+
+      String fileDownloadUri =
+          ServletUriComponentsBuilder.fromCurrentContextPath()
+              .path("/uploads/")
+              .path(fileName)
+              .toUriString();
+
+      product.setImageUrl(fileDownloadUri);
+    }
     Product savedProduct = productRepository.save(product);
     return mapToResponse(savedProduct);
   }
@@ -117,8 +131,20 @@ public class ProductServiceImpl implements ProductService {
     product.setDescription(request.getDescription());
     product.setPrice(request.getPrice());
     product.setStockQuantity(request.getStockQuantity());
-    product.setImageUrl(request.getImageUrl());
     product.setCategory(category);
+
+    if (request.getImage() != null && !request.getImage().isEmpty()) {
+
+      final String fileName = uploadService.storeFile(request.getImage());
+
+      String fileDownloadUri =
+          ServletUriComponentsBuilder.fromCurrentContextPath()
+              .path("/uploads/")
+              .path(fileName)
+              .toUriString();
+
+      product.setImageUrl(fileDownloadUri);
+    }
 
     Product updatedProduct = productRepository.save(product);
     return mapToResponse(updatedProduct);
@@ -156,7 +182,8 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   public @Nullable Object getPopularProducts() {
-    // Placeholder for popular products logic. This could be based on sales, views, etc.
+    // Placeholder for popular products logic. This could be based on sales, views,
+    // etc.
     // For now, we will return the first 5 products as a placeholder.
     return productRepository.findAll(PageRequest.of(0, 5)).getContent().stream()
         .map(this::mapToResponse)
@@ -165,7 +192,8 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   public @Nullable Object getProductsForYou() {
-    // Placeholder for personalized product recommendations. This could be based on user behavior,
+    // Placeholder for personalized product recommendations. This could be based on
+    // user behavior,
     // preferences, etc.
     // For now, we will return the first 5 products as a placeholder.
     return productRepository.findAll(PageRequest.of(0, 5)).getContent().stream()
