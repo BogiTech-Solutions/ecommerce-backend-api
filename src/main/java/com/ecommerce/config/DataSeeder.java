@@ -69,11 +69,17 @@ public class DataSeeder implements CommandLineRunner {
         Category.builder()
             .name("Electronics")
             .slug("Slug")
+            .thumbnail("tibnail.png")
             .description("Gadgets and devices")
             .build();
 
     Category fashion =
-        Category.builder().name("Fashion").slug("Slug").description("Apparel and footwear").build();
+        Category.builder()
+            .name("Fashion")
+            .slug("Slug")
+            .thumbnail("fashion.png")
+            .description("Apparel and footwear")
+            .build();
 
     categoryRepository.saveAll(List.of(electronics, fashion));
 
