@@ -82,7 +82,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     category.setName(request.getName());
     category.setSlug(request.getSlug());
-    category.setThumbnail(uploadService.storeFile(request.getThumbnail()));
     category.setDescription(request.getDescription());
 
     if (request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
