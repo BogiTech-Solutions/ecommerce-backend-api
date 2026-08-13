@@ -4,8 +4,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "app")
 public record EnvConfig(Security security, Payment payment, File file) {
-  public record Security(Jwt jwt) {
+  public record Security(Jwt jwt, Admin admin) {
     public record Jwt(String secret, long expiration) {}
+
+    public record Admin(String email, String password) {}
   }
 
   public record Payment(Stripe stripe, Chapa chapa) {
@@ -19,6 +21,14 @@ public record EnvConfig(Security security, Payment payment, File file) {
   // Convenience Helper Methods
   public String getSigningKey() {
     return security().jwt().secret();
+  }
+
+  public String getSupperAdminEmail() {
+    return security().admin().email();
+  }
+
+  public String getSupperAdminPAssword() {
+    return security().admin().password();
   }
 
   public long getJwtExpiration() {

@@ -5,6 +5,9 @@ app:
     jwt:
       secret: ${SECURITY_JWT_SECRET}
       expiration: ${SECURITY_JWT_EXPIRATION:86400000}
+    admin:
+      email: ${SUPPER_ADMIN_EMAIL}
+      password: ${SUPPER_ADMIN_PASSWORD}
   payment:
     stripe:
       secret-key: ${STRIPE_SECRET_KEY}

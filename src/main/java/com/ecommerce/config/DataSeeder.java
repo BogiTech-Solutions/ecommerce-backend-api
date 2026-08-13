@@ -25,6 +25,7 @@ public class DataSeeder implements CommandLineRunner {
   private final ProductRepository productRepository;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+  private final EnvConfig envConfig;
 
   @Override
   @Transactional
@@ -34,7 +35,8 @@ public class DataSeeder implements CommandLineRunner {
   }
 
   private void seedAdminUser() {
-    String adminEmail = "admin@ecommerce.com";
+    String adminEmail = envConfig.getSupperAdminEmail();
+    String adminPassword = envConfig.getSupperAdminPAssword();
 
     if (userRepository.findByEmail(adminEmail).isPresent()) {
       log.info("Admin user already exists. Skipping admin seeding...");
@@ -45,13 +47,11 @@ public class DataSeeder implements CommandLineRunner {
 
     User admin =
         User.builder()
-            .firstName("Admin")
-            .lastName("User")
+            .firstName("Supper")
+            .lastName("Admin")
             .email(adminEmail)
-            .password(passwordEncoder.encode("Admin123!"))
+            .password(passwordEncoder.encode(adminPassword))
             .role(Role.ROLE_ADMIN)
-            .avator("adminEmail")
-            .phone("+251923872187")
             .enabled(true)
             .build();
 
