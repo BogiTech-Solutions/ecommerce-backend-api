@@ -13,11 +13,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
+  private final FileUploadService uploadService;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
@@ -69,9 +71,15 @@ public class UserService {
 
     // Handle Avatar File Upload if present
     if (request.getAvator() != null && !request.getAvator().isEmpty()) {
-      // TODO: Save file to storage (Local, S3, Cloudinary, etc.) and get the URL/path
-      // String avatarUrl = fileStorageService.saveFile(request.getAvator());
-      // user.setAvator(avatarUrl);
+      final String fileName = uploadService.storeFile(request.getAvator());
+
+      String fileDownloadUri =
+          ServletUriComponentsBuilder.fromCurrentContextPath()
+              .path("/uploads/")
+              .path(fileName)
+              .toUriString();
+
+      user.setAvator(fileDownloadUri);
     }
 
     User updatedUser = userRepository.save(user);

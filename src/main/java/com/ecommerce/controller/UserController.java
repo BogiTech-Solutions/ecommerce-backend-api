@@ -20,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,10 +45,11 @@ public class UserController {
     return ResponseEntity.ok(userService.getCurrentUserProfile(userDetails.getUsername()));
   }
 
-  @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PutMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<UserProfileResponse> updateProfile(
       @AuthenticationPrincipal UserDetails userDetails,
-      @Valid @RequestBody UpdateProfileRequest request) {
+      @ModelAttribute UpdateProfileRequest request) { // Changed @RequestBody to @ModelAttribute
+
     return ResponseEntity.ok(userService.updateProfile(userDetails.getUsername(), request));
   }
 
