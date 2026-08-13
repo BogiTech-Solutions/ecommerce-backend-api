@@ -31,8 +31,48 @@ public class UserService {
   @Transactional
   public UserProfileResponse updateProfile(String email, UpdateProfileRequest request) {
     User user = getUserByEmail(email);
-    user.setFirstName(request.getFirstName());
-    user.setLastName(request.getLastName());
+
+    // Update First Name if provided and not empty
+    if (request.getFirstName() != null && !request.getFirstName().isBlank()) {
+      user.setFirstName(request.getFirstName());
+    }
+
+    // Update Last Name if provided and not empty
+    if (request.getLastName() != null && !request.getLastName().isBlank()) {
+      user.setLastName(request.getLastName());
+    }
+
+    // Update Phone if provided and not empty
+    if (request.getPhone() != null && !request.getPhone().isBlank()) {
+      user.setPhone(request.getPhone());
+    }
+
+    // Update Role (ensure proper object comparison)
+    if (request.getRole() != null) {
+      user.setRole(request.getRole());
+    }
+
+    // Update Status if provided
+    if (request.getStatus() != null) {
+      user.setStatus(request.getStatus());
+    }
+
+    // Update Total Orders if provided
+    if (request.getTotalOrders() != null) {
+      user.setTotalOrders(request.getTotalOrders());
+    }
+
+    // Update Total Spent if provided
+    if (request.getTotalSpent() != null) {
+      user.setTotalSpent(request.getTotalSpent());
+    }
+
+    // Handle Avatar File Upload if present
+    if (request.getAvator() != null && !request.getAvator().isEmpty()) {
+      // TODO: Save file to storage (Local, S3, Cloudinary, etc.) and get the URL/path
+      // String avatarUrl = fileStorageService.saveFile(request.getAvator());
+      // user.setAvator(avatarUrl);
+    }
 
     User updatedUser = userRepository.save(user);
     return mapToProfileResponse(updatedUser);
@@ -112,6 +152,9 @@ public class UserService {
         .enabled(user.isEnabled())
         .phone(user.getPhone())
         .avator(user.getAvator())
+        .status(user.getStatus())
+        .totalOrders(user.getTotalOrders())
+        .totalSpent(user.getTotalSpent())
         .createdAt(user.getCreatedAt())
         .build();
   }

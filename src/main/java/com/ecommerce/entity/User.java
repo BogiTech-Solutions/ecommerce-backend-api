@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -59,6 +60,19 @@ public class User implements UserDetails {
   @Column private String avator;
 
   @Column private String phone;
+
+  @Enumerated(EnumType.STRING)
+  @Builder.Default
+  @Column(nullable = false)
+  private UserStatus status = UserStatus.ACTIVE; // e.g., ACTIVE, INACTIVE, SUSPENDED
+
+  @Builder.Default
+  @Column(nullable = false)
+  private Long totalOrders = 0L;
+
+  @Builder.Default
+  @Column(nullable = false, precision = 12, scale = 2)
+  private BigDecimal totalSpent = BigDecimal.ZERO;
 
   @Builder.Default
   @Column(nullable = false)
