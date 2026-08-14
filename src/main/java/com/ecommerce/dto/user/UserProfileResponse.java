@@ -12,9 +12,8 @@ import lombok.Data;
 public class UserProfileResponse {
   private Long id;
   private String email;
-  private String firstName;
-  private String lastName;
-  private String avator;
+  private String name;
+  private String avatar;
   private String phone;
   private Role role;
   private UserStatus status;
