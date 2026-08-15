@@ -49,29 +49,9 @@ public class UserService {
       user.setPhone(request.getPhone());
     }
 
-    // Update Role (ensure proper object comparison)
-    if (request.getRole() != null) {
-      user.setRole(request.getRole());
-    }
-
-    // Update Status if provided
-    if (request.getStatus() != null) {
-      user.setStatus(request.getStatus());
-    }
-
-    // Update Total Orders if provided
-    if (request.getTotalOrders() != null) {
-      user.setTotalOrders(request.getTotalOrders());
-    }
-
-    // Update Total Spent if provided
-    if (request.getTotalSpent() != null) {
-      user.setTotalSpent(request.getTotalSpent());
-    }
-
     // Handle Avatar File Upload if present
-    if (request.getAvator() != null && !request.getAvator().isEmpty()) {
-      final String fileName = uploadService.storeFile(request.getAvator());
+    if (request.getAvatar() != null && !request.getAvatar().isEmpty()) {
+      final String fileName = uploadService.storeFile(request.getAvatar());
 
       String fileDownloadUri =
           ServletUriComponentsBuilder.fromCurrentContextPath()
