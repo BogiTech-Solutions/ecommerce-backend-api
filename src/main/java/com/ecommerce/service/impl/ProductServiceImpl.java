@@ -158,19 +158,6 @@ public class ProductServiceImpl implements ProductService {
     productRepository.deleteById(id);
   }
 
-  private ProductResponse mapToResponse(Product product) {
-    return ProductResponse.builder()
-        .id(product.getId())
-        .name(product.getName())
-        .description(product.getDescription())
-        .price(product.getPrice())
-        .stockQuantity(product.getStockQuantity())
-        .imageUrl(product.getImageUrl())
-        .categoryId(product.getCategory().getId())
-        .categoryName(product.getCategory().getName())
-        .build();
-  }
-
   @Override
   public @Nullable Object searchProducts(String query) {
     return productRepository
@@ -199,5 +186,18 @@ public class ProductServiceImpl implements ProductService {
     return productRepository.findAll(PageRequest.of(0, 5)).getContent().stream()
         .map(this::mapToResponse)
         .collect(Collectors.toList());
+  }
+
+  private ProductResponse mapToResponse(Product product) {
+    return ProductResponse.builder()
+        .id(product.getId())
+        .name(product.getName())
+        .description(product.getDescription())
+        .price(product.getPrice())
+        .stockQuantity(product.getStockQuantity())
+        .imageUrl(product.getImageUrl())
+        .categoryId(product.getCategory().getId())
+        .categoryName(product.getCategory().getName())
+        .build();
   }
 }
