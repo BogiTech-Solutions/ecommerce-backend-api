@@ -3,14 +3,16 @@ package com.ecommerce.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "ads")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "ads")
 public class Ad {
 
   @Id
@@ -23,10 +25,13 @@ public class Ad {
   @Column(columnDefinition = "TEXT")
   private String description;
 
+  @Column(nullable = false)
   private String imageUrl;
 
+  @Column(nullable = false)
   private String targetUrl;
 
+  @Builder.Default
   @Column(nullable = false)
   private boolean active = true;
 

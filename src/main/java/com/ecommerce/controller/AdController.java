@@ -1,10 +1,12 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.dto.AdRequest;
 import com.ecommerce.entity.Ad;
 import com.ecommerce.service.AdService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,11 +36,19 @@ public class AdController {
   }
 
   // POST /api/ads - Create a new ad (Admin feature)
-  @PostMapping
   @PreAuthorize("hasRole('ADMIN')")
-  public ResponseEntity<Ad> createAd(@Valid @RequestBody Ad ad) {
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Ad> createAd(@Valid @ModelAttribute AdRequest ad) {
     Ad createdAd = adService.createAd(ad);
     return ResponseEntity.status(HttpStatus.CREATED).body(createdAd);
+  }
+
+  // POST /api/ads/{id} - update ad (Admin feature)
+  @PreAuthorize("hasRole('ADMIN')")
+  @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Ad> updateAd(@PathVariable Long id, @ModelAttribute AdRequest ad) {
+    Ad updatedAd = adService.updateAd(id, ad);
+    return ResponseEntity.status(200).body(updatedAd);
   }
 
   // DELETE /api/ads/{id} - Delete an ad by ID (Admin feature)
