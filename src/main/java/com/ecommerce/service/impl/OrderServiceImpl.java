@@ -96,6 +96,7 @@ public class OrderServiceImpl implements OrderService {
     return mapToResponse(savedOrder);
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<OrderResponse> getUserOrders(String userEmail) {
     User user =
