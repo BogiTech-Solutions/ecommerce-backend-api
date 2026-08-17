@@ -2,6 +2,7 @@ package com.ecommerce.controller;
 
 import com.ecommerce.dto.OrderRequest;
 import com.ecommerce.dto.OrderResponse;
+import com.ecommerce.dto.PageResponse;
 import com.ecommerce.entity.OrderStatus;
 import com.ecommerce.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +39,18 @@ public class OrderController {
       @AuthenticationPrincipal UserDetails userDetails, @RequestBody OrderRequest request) {
     return new ResponseEntity<>(
         orderService.createOrder(userDetails.getUsername(), request), HttpStatus.CREATED);
+  }
+
+  @GetMapping("/paged")
+  @PreAuthorize("hasRole('ADMIN')")
+  @Operation(summary = "Get Paged Orders")
+  public ResponseEntity<PageResponse<OrderResponse>> getPaginatedOrders(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "createdAt") String sortBy,
+      @RequestParam(defaultValue = "desc") String sortDir) {
+
+    return ResponseEntity.ok(orderService.getPaginatedOrders(page, size, sortBy, sortDir));
   }
 
   @GetMapping

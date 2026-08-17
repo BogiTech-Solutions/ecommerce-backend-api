@@ -4,6 +4,7 @@ import com.ecommerce.dto.OrderItemRequest;
 import com.ecommerce.dto.OrderItemResponse;
 import com.ecommerce.dto.OrderRequest;
 import com.ecommerce.dto.OrderResponse;
+import com.ecommerce.dto.PageResponse;
 import com.ecommerce.entity.Order;
 import com.ecommerce.entity.OrderItem;
 import com.ecommerce.entity.OrderStatus;
@@ -20,6 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -153,6 +158,30 @@ public class OrderServiceImpl implements OrderService {
         .status(order.getStatus())
         .createdAt(order.getCreatedAt())
         .items(itemResponses)
+        .build();
+  }
+
+  @Override
+  public PageResponse<OrderResponse> getPaginatedOrders(
+      int page, int size, String sortBy, String sortDir) {
+    Sort sort =
+        sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+            ? Sort.by(sortBy).ascending()
+            : Sort.by(sortBy).descending();
+
+    Pageable pageable = PageRequest.of(page, size, sort);
+    Page<Order> orderPage = orderRepository.findAllWithItems(pageable);
+
+    List<OrderResponse> content =
+        orderPage.getContent().stream().map(this::mapToResponse).collect(Collectors.toList());
+
+    return PageResponse.<OrderResponse>builder()
+        .content(content)
+        .pageNumber(orderPage.getNumber())
+        .pageSize(orderPage.getSize())
+        .totalElements(orderPage.getTotalElements())
+        .totalPages(orderPage.getTotalPages())
+        .last(orderPage.isLast())
         .build();
   }
 }
