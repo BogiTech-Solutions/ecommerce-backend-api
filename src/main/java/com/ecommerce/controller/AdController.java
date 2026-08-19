@@ -3,23 +3,25 @@ package com.ecommerce.controller;
 import com.ecommerce.dto.AdRequest;
 import com.ecommerce.entity.Ad;
 import com.ecommerce.service.AdService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/ads")
+@RequiredArgsConstructor
+@Tag(name = "Ads", description = "Endpoints for managing product ads")
 public class AdController {
 
   private final AdService adService;
-
-  public AdController(AdService adService) {
-    this.adService = adService;
-  }
 
   // GET /api/ads - Public endpoint to fetch active ads
   @GetMapping
